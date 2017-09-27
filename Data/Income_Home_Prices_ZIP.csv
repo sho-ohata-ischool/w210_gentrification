@@ -1,0 +1,631 @@
+ZIP Code,Borough,Neighborhood,Year,Median HH Income ($),Mean HH Income ($),% Employed,% Unemployed,% Not in Labor Force
+10453,Bronx,Central Bronx,2015,"$23,095","$33,354",51.20%,8.30%,40.50%
+10453,Bronx,Central Bronx,2014,"$24,741","$33,985",50.60%,11.70%,37.70%
+10453,Bronx,Central Bronx,2013,"$25,470","$35,381",50.40%,13.20%,36.30%
+10453,Bronx,Central Bronx,2012,"$26,120","$35,931",52.30%,13.80%,33.80%
+10453,Bronx,Central Bronx,2011,"$26,574","$36,352",52.10%,14.30%,33.60%
+10457,Bronx,Central Bronx,2015,"$24,750.00","$36,604.00",41.70%,9.30%,43.60%
+10457,Bronx,Central Bronx,2014,"$24,883.00","$36,013.00",46.60%,10.30%,43.10%
+10457,Bronx,Central Bronx,2013,"$24,949.00","$36,595.00",46.30%,9.80%,43.90%
+10457,Bronx,Central Bronx,2012,"$26,520.00","$37,197.00",46.40%,9.20%,44.40%
+10457,Bronx,Central Bronx,2011,"$24,537.00","$35,096.00",47.70%,8.70%,43.50%
+10460,Bronx,Central Bronx,2015,"$23,209.00","$35,624.00",47.40%,13.90%,38.60%
+10460,Bronx,Central Bronx,2014,"$23,289.00","$34,899.00",47.50%,12.90%,39.60%
+10460,Bronx,Central Bronx,2013,"$22,307.00","$34,517.00",47.70%,11.40%,40.80%
+10460,Bronx,Central Bronx,2012,"$22,625.00","$33,547.00",48.70%,10.40%,40.80%
+10460,Bronx,Central Bronx,2011,"$24,307.00","$35,187.00",50.70%,7.40%,41.90%
+10458,Bronx,Bronx Park and Fordham,2015,"$27,912.00","$41,474.00",50.80%,9.70%,39.60%
+10458,Bronx,Bronx Park and Fordham,2014,"$28,988.00","$39,553.00",48.50%,9.40%,42.10%
+10458,Bronx,Bronx Park and Fordham,2013,"$28,762.00","$41,844.00",49.20%,9.10%,41.70%
+10458,Bronx,Bronx Park and Fordham,2012,"$27,309.00","$40,112.00",49.50%,8.10%,42.30%
+10458,Bronx,Bronx Park and Fordham,2011,"$27,899.00","$37,609.00",50.90%,7.30%,41.80%
+10467,Bronx,Bronx Park and Fordham,2015,"$35,117.00","$46,518.00",52.00%,10.00%,38.00%
+10467,Bronx,Bronx Park and Fordham,2014,"$35,852.00","$47,788.00",52.50%,10.30%,37.20%
+10467,Bronx,Bronx Park and Fordham,2013,"$39,663.00","$52,307.00",53.30%,10.20%,36.50%
+10467,Bronx,Bronx Park and Fordham,2012,"$39,414.00","$51,038.00",54.00%,9.40%,36.60%
+10467,Bronx,Bronx Park and Fordham,2011,"$40,799.00","$51,760.00",55.10%,8.30%,36.60%
+10468,Bronx,Bronx Park and Fordham,2015,"$34,784.00","$44,912.00",56.30%,9.80%,33.90%
+10468,Bronx,Bronx Park and Fordham,2014,"$33,585.00","$43,225.00",54.10%,11.00%,34.80%
+10468,Bronx,Bronx Park and Fordham,2013,"$33,776.00","$43,327.00",54.40%,11.70%,33.80%
+10468,Bronx,Bronx Park and Fordham,2012,"$32,985.00","$43,404.00",54.70%,10.40%,34.80%
+10468,Bronx,Bronx Park and Fordham,2011,"$31,707.00","$42,329.00",54.00%,9.80%,36.20%
+10451,Bronx,High Bridge and Morrisania,2015,"$29,579.00","$41,438.00",46.50%,8.10%,45.30%
+10451,Bronx,High Bridge and Morrisania,2014,"$32,000.00","$41,114.00",46.80%,8.60%,44.60%
+10451,Bronx,High Bridge and Morrisania,2013,"$30,757.00","$39,723.00",46.60%,10.10%,43.30%
+10451,Bronx,High Bridge and Morrisania,2012,"$30,139.00","$38,360.00",47.90%,9.30%,42.70%
+10451,Bronx,High Bridge and Morrisania,2011,"$29,327.00","$38,565.00",48.90%,8.90%,42.20%
+10452,Bronx,High Bridge and Morrisania,2015,"$24,790.00","$36,083.00",50.70%,8.50%,40.90%
+10452,Bronx,High Bridge and Morrisania,2014,"$24,965.00","$35,555.00",49.10%,10.00%,40.90%
+10452,Bronx,High Bridge and Morrisania,2013,"$25,979.00","$36,082.00",51.10%,10.20%,38.70%
+10452,Bronx,High Bridge and Morrisania,2012,"$26,636.00","$35,637.00",51.90%,9.80%,38.20%
+10452,Bronx,High Bridge and Morrisania,2011,"$27,040.00","$35,744.00",52.60%,8.90%,38.30%
+10456,Bronx,High Bridge and Morrisania,2015,"$23,956.00","$35,722.00",46.00%,9.00%,45.00%
+10456,Bronx,High Bridge and Morrisania,2014,"$22,962.00","$34,536.00",45.10%,9.30%,45.50%
+10456,Bronx,High Bridge and Morrisania,2013,"$23,452.00","$34,753.00",45.70%,10.20%,44.00%
+10456,Bronx,High Bridge and Morrisania,2012,"$22,604.00","$33,917.00",46.10%,10.00%,43.80%
+10456,Bronx,High Bridge and Morrisania,2011,"$22,549.00","$33,512.00",47.30%,8.90%,43.60%
+10454,Bronx,Hunts Point and Mott Haven,2015,"$20,210.00","$31,533.00",45.20%,7.90%,46.90%
+10454,Bronx,Hunts Point and Mott Haven,2014,"$19,536.00","$31,670.00",44.70%,8.00%,47.30%
+10454,Bronx,Hunts Point and Mott Haven,2013,"$20,232.00","$31,814.00",44.90%,8.00%,47.10%
+10454,Bronx,Hunts Point and Mott Haven,2012,"$19,271.00","$31,125.00",44.50%,8.30%,47.20%
+10454,Bronx,Hunts Point and Mott Haven,2011,"$19,840.00","$33,417.00",45.50%,8.80%,45.70%
+10455,Bronx,Hunts Point and Mott Haven,2015,"$23,253.00","$32,854.00",48.20%,7.80%,44.00%
+10455,Bronx,Hunts Point and Mott Haven,2014,"$22,996.00","$33,128.00",46.30%,8.50%,45.10%
+10455,Bronx,Hunts Point and Mott Haven,2013,"$22,609.00","$32,350.00",45.10%,10.00%,44.90%
+10455,Bronx,Hunts Point and Mott Haven,2012,"$21,379.00","$31,243.00",45.10%,9.60%,45.10%
+10455,Bronx,Hunts Point and Mott Haven,2011,"$23,830.00","$33,418.00",46.70%,9.20%,44.00%
+10459,Bronx,Hunts Point and Mott Haven,2015,"$23,761.00","$35,964.00",46.30%,5.60%,48.20%
+10459,Bronx,Hunts Point and Mott Haven,2014,"$23,400.00","$36,133.00",46.60%,7.40%,46.00%
+10459,Bronx,Hunts Point and Mott Haven,2013,"$24,461.00","$35,421.00",46.80%,8.10%,45.10%
+10459,Bronx,Hunts Point and Mott Haven,2012,"$21,913.00","$33,917.00",46.30%,8.70%,44.90%
+10459,Bronx,Hunts Point and Mott Haven,2011,"$22,458.00","$34,701.00",48.10%,8.40%,43.50%
+10474,Bronx,Hunts Point and Mott Haven,2015,"$30,023.00","$39,585.00",42.30%,6.80%,50.90%
+10474,Bronx,Hunts Point and Mott Haven,2014,"$30,306.00","$36,439.00",42.20%,8.80%,48.90%
+10474,Bronx,Hunts Point and Mott Haven,2013,"$29,337.00","$35,397.00",42.60%,9.40%,48.00%
+10474,Bronx,Hunts Point and Mott Haven,2012,"$27,622.00","$34,918.00",43.80%,8.50%,47.70%
+10474,Bronx,Hunts Point and Mott Haven,2011,"$24,167.00","$31,333.00",42.30%,8.00%,49.70%
+10463,Bronx,Kingsbridge and Riverdale,2015,"$56,482.00","$80,384.00",56.70%,6.50%,36.90%
+10463,Bronx,Kingsbridge and Riverdale,2014,"$55,354.00","$77,506.00",55.50%,7.10%,37.40%
+10463,Bronx,Kingsbridge and Riverdale,2013,"$54,258.00","$76,188.00",55.80%,6.60%,37.70%
+10463,Bronx,Kingsbridge and Riverdale,2012,"$53,282.00","$73,920.00",55.70%,6.70%,37.60%
+10463,Bronx,Kingsbridge and Riverdale,2011,"$52,505.00","$72,426.00",56.10%,6.10%,37.70%
+10471,Bronx,Kingsbridge and Riverdale,2015,"$80,222.00","$105,625.00",53.80%,5.90%,40.30%
+10471,Bronx,Kingsbridge and Riverdale,2014,"$73,684.00","$100,733.00",52.70%,4.80%,42.50%
+10471,Bronx,Kingsbridge and Riverdale,2013,"$71,798.00","$103,040.00",52.20%,4.60%,43.20%
+10471,Bronx,Kingsbridge and Riverdale,2012,"$71,286.00","$108,766.00",54.20%,3.90%,41.90%
+10471,Bronx,Kingsbridge and Riverdale,2011,"$72,431.00","$104,139.00",55.30%,4.00%,40.70%
+10466,Bronx,Northeast Bronx,2015,"$42,478.00","$56,348.00",55.20%,7.50%,37.30%
+10466,Bronx,Northeast Bronx,2014,"$42,587.00","$55,669.00",54.30%,8.00%,37.70%
+10466,Bronx,Northeast Bronx,2013,"$44,012.00","$56,384.00",55.70%,7.30%,37.00%
+10466,Bronx,Northeast Bronx,2012,"$44,038.00","$55,708.00",55.70%,6.90%,37.40%
+10466,Bronx,Northeast Bronx,2011,"$45,737.00","$56,838.00",56.40%,6.70%,36.90%
+10469,Bronx,Northeast Bronx,2015,"$57,207.00","$70,069.00",53.80%,9.40%,36.80%
+10469,Bronx,Northeast Bronx,2014,"$57,680.00","$69,954.00",52.30%,10.30%,37.40%
+10469,Bronx,Northeast Bronx,2013,"$57,776.00","$69,599.00",52.00%,11.10%,36.70%
+10469,Bronx,Northeast Bronx,2012,"$55,724.00","$69,050.00",52.30%,10.70%,36.90%
+10469,Bronx,Northeast Bronx,2011,"$56,352.00","$69,155.00",53.70%,9.90%,36.10%
+10470,Bronx,Northeast Bronx,2015,"$57,706.00","$70,509.00",57.30%,7.50%,35.10%
+10470,Bronx,Northeast Bronx,2014,"$58,330.00","$70,004.00",58.90%,8.10%,33.10%
+10470,Bronx,Northeast Bronx,2013,"$58,600.00","$69,447.00",59.10%,8.50%,32.40%
+10470,Bronx,Northeast Bronx,2012,"$56,058.00","$68,874.00",57.20%,7.80%,35.10%
+10470,Bronx,Northeast Bronx,2011,"$52,510.00","$65,451.00",58.30%,6.20%,35.40%
+10475,Bronx,Northeast Bronx,2015,"$44,923.00","$59,288.00",51.20%,6.50%,42.30%
+10475,Bronx,Northeast Bronx,2014,"$45,886.00","$59,944.00",50.20%,7.00%,42.70%
+10475,Bronx,Northeast Bronx,2013,"$43,629.00","$58,630.00",49.10%,7.10%,43.70%
+10475,Bronx,Northeast Bronx,2012,"$45,460.00","$59,204.00",50.50%,6.60%,42.70%
+10475,Bronx,Northeast Bronx,2011,"$47,767.00","$60,158.00",52.10%,5.90%,41.90%
+10461,Bronx,Southeast Bronx,2015,"$51,568.00","$68,790.00",55.80%,7.00%,37.20%
+10461,Bronx,Southeast Bronx,2014,"$52,230.00","$69,608.00",55.40%,7.60%,37.00%
+10461,Bronx,Southeast Bronx,2013,"$52,347.00","$67,093.00",55.00%,7.90%,37.10%
+10461,Bronx,Southeast Bronx,2012,"$50,329.00","$64,578.00",55.50%,7.20%,37.30%
+10461,Bronx,Southeast Bronx,2011,"$51,147.00","$63,417.00",54.90%,6.30%,38.60%
+10462,Bronx,Southeast Bronx,2015,"$45,760.00","$57,940.00",58.50%,9.10%,32.20%
+10462,Bronx,Southeast Bronx,2014,"$45,234.00","$55,313.00",57.50%,8.90%,33.40%
+10462,Bronx,Southeast Bronx,2013,"$45,864.00","$55,062.00",56.30%,7.70%,35.80%
+10462,Bronx,Southeast Bronx,2012,"$46,001.00","$54,058.00",56.80%,6.20%,37.00%
+10462,Bronx,Southeast Bronx,2011,"$45,025.00","$52,056.00",56.10%,4.50%,39.40%
+10464,Bronx,Southeast Bronx,2015,"$75,208.00","$90,671.00",59.60%,4.40%,36.10%
+10464,Bronx,Southeast Bronx,2014,"$75,696.00","$90,265.00",61.60%,3.40%,35.10%
+10464,Bronx,Southeast Bronx,2013,"$70,078.00","$79,490.00",60.10%,2.90%,37.00%
+10464,Bronx,Southeast Bronx,2012,"$61,063.00","$75,880.00",60.20%,3.40%,36.40%
+10464,Bronx,Southeast Bronx,2011,"$67,273.00","$81,856.00",64.90%,1.70%,33.40%
+10465,Bronx,Southeast Bronx,2015,"$73,776.00","$85,312.00",55.50%,5.40%,39.10%
+10465,Bronx,Southeast Bronx,2014,"$68,831.00","$82,114.00",54.50%,5.70%,39.70%
+10465,Bronx,Southeast Bronx,2013,"$65,450.00","$80,849.00",53.90%,5.90%,40.00%
+10465,Bronx,Southeast Bronx,2012,"$63,352.00","$77,110.00",54.40%,5.80%,39.60%
+10465,Bronx,Southeast Bronx,2011,"$66,216.00","$77,952.00",56.10%,4.80%,38.80%
+10472,Bronx,Southeast Bronx,2015,"$29,308.00","$41,909.00",51.80%,7.60%,40.60%
+10472,Bronx,Southeast Bronx,2014,"$30,541.00","$43,989.00",51.60%,7.70%,40.70%
+10472,Bronx,Southeast Bronx,2013,"$30,288.00","$43,093.00",50.60%,8.30%,41.10%
+10472,Bronx,Southeast Bronx,2012,"$31,594.00","$45,090.00",52.00%,7.50%,40.50%
+10472,Bronx,Southeast Bronx,2011,"$30,413.00","$43,420.00",51.00%,7.10%,41.90%
+10473,Bronx,Southeast Bronx,2015,"$36,764.00","$51,802.00",47.50%,6.70%,45.80%
+10473,Bronx,Southeast Bronx,2014,"$36,729.00","$53,120.00",47.50%,6.50%,46.00%
+10473,Bronx,Southeast Bronx,2013,"$35,866.00","$52,054.00",47.90%,6.00%,46.00%
+10473,Bronx,Southeast Bronx,2012,"$37,616.00","$54,193.00",50.30%,4.50%,45.20%
+10473,Bronx,Southeast Bronx,2011,"$39,818.00","$54,715.00",51.40%,4.20%,44.40%
+11212,Brooklyn,Central Brooklyn,2015,"$28,207.00","$40,177.00",46.10%,7.70%,46.20%
+11212,Brooklyn,Central Brooklyn,2014,"$28,146.00","$40,233.00",46.20%,7.40%,46.30%
+11212,Brooklyn,Central Brooklyn,2013,"$28,348.00","$39,952.00",46.50%,7.20%,46.20%
+11212,Brooklyn,Central Brooklyn,2012,"$27,901.00","$39,500.00",47.10%,7.60%,45.20%
+11212,Brooklyn,Central Brooklyn,2011,"$27,278.00","$38,168.00",47.20%,8.20%,44.50%
+11213,Brooklyn,Central Brooklyn,2015,"$34,701.00","$47,669.00",53.20%,6.10%,40.60%
+11213,Brooklyn,Central Brooklyn,2014,"$34,804.00","$47,297.00",51.60%,6.50%,41.80%
+11213,Brooklyn,Central Brooklyn,2013,"$34,794.00","$46,913.00",51.50%,6.20%,42.30%
+11213,Brooklyn,Central Brooklyn,2012,"$35,344.00","$47,274.00",52.30%,5.70%,42.00%
+11213,Brooklyn,Central Brooklyn,2011,"$34,046.00","$45,630.00",51.70%,5.80%,42.40%
+11216,Brooklyn,Central Brooklyn,2015,"$47,107.00","$65,962.00",61.70%,8.30%,30.00%
+11216,Brooklyn,Central Brooklyn,2014,"$45,566.00","$63,003.00",60.50%,8.00%,31.40%
+11216,Brooklyn,Central Brooklyn,2013,"$43,996.00","$61,139.00",58.60%,7.40%,33.90%
+11216,Brooklyn,Central Brooklyn,2012,"$41,688.00","$56,185.00",56.90%,6.70%,36.30%
+11216,Brooklyn,Central Brooklyn,2011,"$40,174.00","$54,693.00",57.50%,5.60%,36.80%
+11233,Brooklyn,Central Brooklyn,2015,"$33,745.00","$50,071.00",52.00%,7.90%,40.00%
+11233,Brooklyn,Central Brooklyn,2014,"$34,432.00","$49,486.00",51.70%,8.20%,40.10%
+11233,Brooklyn,Central Brooklyn,2013,"$34,492.00","$49,669.00",50.60%,9.00%,40.30%
+11233,Brooklyn,Central Brooklyn,2012,"$35,620.00","$49,570.00",52.20%,8.50%,39.30%
+11233,Brooklyn,Central Brooklyn,2011,"$34,633.00","$48,047.00",51.60%,7.10%,41.30%
+11238,Brooklyn,Central Brooklyn,2015,"$70,873.00","$93,918.00",66.80%,6.00%,27.20%
+11238,Brooklyn,Central Brooklyn,2014,"$69,491.00","$89,269.00",67.60%,6.40%,25.90%
+11238,Brooklyn,Central Brooklyn,2013,"$65,315.00","$88,005.00",68.10%,6.90%,25.00%
+11238,Brooklyn,Central Brooklyn,2012,"$64,981.00","$85,680.00",66.80%,7.80%,25.40%
+11238,Brooklyn,Central Brooklyn,2011,"$61,950.00","$80,729.00",66.50%,7.40%,26.10%
+11209,Brooklyn,Southwest Brooklyn,2015,"$62,761.00","$87,004.00",58.80%,5.30%,35.70%
+11209,Brooklyn,Southwest Brooklyn,2014,"$59,934.00","$84,945.00",57.20%,5.40%,37.00%
+11209,Brooklyn,Southwest Brooklyn,2013,"$58,261.00","$82,258.00",56.40%,5.70%,37.50%
+11209,Brooklyn,Southwest Brooklyn,2012,"$57,713.00","$81,059.00",57.00%,5.20%,37.20%
+11209,Brooklyn,Southwest Brooklyn,2011,"$57,082.00","$80,997.00",56.50%,4.80%,38.00%
+11214,Brooklyn,Southwest Brooklyn,2015,"$49,828.00","$66,803.00",54.00%,5.20%,40.80%
+11214,Brooklyn,Southwest Brooklyn,2014,"$45,838.00","$62,934.00",51.80%,5.40%,42.80%
+11214,Brooklyn,Southwest Brooklyn,2013,"$43,398.00","$59,810.00",49.90%,5.20%,44.90%
+11214,Brooklyn,Southwest Brooklyn,2012,"$41,246.00","$56,340.00",49.70%,4.90%,45.40%
+11214,Brooklyn,Southwest Brooklyn,2011,"$39,822.00","$54,880.00",49.70%,4.00%,46.20%
+11228,Brooklyn,Southwest Brooklyn,2015,"$64,250.00","$87,560.00",54.50%,5.20%,40.30%
+11228,Brooklyn,Southwest Brooklyn,2014,"$62,821.00","$86,920.00",54.10%,5.70%,40.00%
+11228,Brooklyn,Southwest Brooklyn,2013,"$61,893.00","$83,920.00",52.90%,5.80%,41.20%
+11228,Brooklyn,Southwest Brooklyn,2012,"$61,213.00","$82,025.00",51.70%,5.10%,43.10%
+11228,Brooklyn,Southwest Brooklyn,2011,"$59,624.00","$79,691.00",50.90%,4.40%,44.70%
+11204,Brooklyn,Borough Park,2015,"$46,560.00","$65,150.00",53.40%,5.20%,41.30%
+11204,Brooklyn,Borough Park,2014,"$45,593.00","$63,616.00",52.50%,5.40%,42.10%
+11204,Brooklyn,Borough Park,2013,"$45,472.00","$62,859.00",52.10%,5.60%,42.30%
+11204,Brooklyn,Borough Park,2012,"$45,112.00","$61,911.00",52.60%,5.40%,42.00%
+11204,Brooklyn,Borough Park,2011,"$44,312.00","$59,739.00",52.60%,5.00%,42.30%
+11218,Brooklyn,Borough Park,2015,"$56,120.00","$78,208.00",60.70%,4.60%,34.80%
+11218,Brooklyn,Borough Park,2014,"$54,441.00","$72,945.00",59.50%,4.70%,35.60%
+11218,Brooklyn,Borough Park,2013,"$52,445.00","$70,046.00",58.90%,5.00%,36.00%
+11218,Brooklyn,Borough Park,2012,"$53,251.00","$69,648.00",59.40%,4.80%,35.70%
+11218,Brooklyn,Borough Park,2011,"$50,938.00","$66,711.00",58.90%,4.30%,36.70%
+11219,Brooklyn,Borough Park,2015,"$35,974.00","$52,503.00",54.20%,3.90%,41.90%
+11219,Brooklyn,Borough Park,2014,"$35,083.00","$51,454.00",54.10%,4.00%,41.80%
+11219,Brooklyn,Borough Park,2013,"$34,316.00","$50,967.00",53.10%,4.40%,42.50%
+11219,Brooklyn,Borough Park,2012,"$34,590.00","$51,257.00",53.50%,4.20%,42.20%
+11219,Brooklyn,Borough Park,2011,"$34,804.00","$51,375.00",52.80%,4.40%,42.80%
+11230,Brooklyn,Borough Park,2015,"$41,068.00","$66,632.00",52.60%,5.00%,42.40%
+11230,Brooklyn,Borough Park,2014,"$41,820.00","$66,750.00",52.20%,5.20%,42.40%
+11230,Brooklyn,Borough Park,2013,"$42,170.00","$63,309.00",52.30%,5.90%,41.70%
+11230,Brooklyn,Borough Park,2012,"$42,568.00","$61,634.00",52.10%,5.20%,42.60%
+11230,Brooklyn,Borough Park,2011,"$43,147.00","$61,727.00",52.00%,4.60%,43.40%
+11234,Brooklyn,Canarsie and Flatlands,2015,"$71,115.00","$89,848.00",57.70%,6.70%,35.60%
+11234,Brooklyn,Canarsie and Flatlands,2014,"$67,713.00","$85,437.00",57.50%,6.90%,35.60%
+11234,Brooklyn,Canarsie and Flatlands,2013,"$68,431.00","$84,530.00",58.30%,6.60%,35.00%
+11234,Brooklyn,Canarsie and Flatlands,2012,"$68,177.00","$83,582.00",58.20%,6.30%,35.40%
+11234,Brooklyn,Canarsie and Flatlands,2011,"$67,776.00","$83,647.00",59.00%,5.50%,35.50%
+11236,Brooklyn,Canarsie and Flatlands,2015,"$58,705.00","$72,543.00",59.70%,6.50%,33.70%
+11236,Brooklyn,Canarsie and Flatlands,2014,"$60,135.00","$73,164.00",60.40%,6.50%,33.00%
+11236,Brooklyn,Canarsie and Flatlands,2013,"$61,061.00","$72,060.00",59.40%,6.50%,33.90%
+11236,Brooklyn,Canarsie and Flatlands,2012,"$60,758.00","$72,182.00",59.80%,6.20%,33.90%
+11236,Brooklyn,Canarsie and Flatlands,2011,"$61,794.00","$71,984.00",59.90%,4.90%,35.10%
+11239,Brooklyn,Canarsie and Flatlands,2015,"$26,186.00","$34,840.00",39.80%,6.70%,53.50%
+11239,Brooklyn,Canarsie and Flatlands,2014,"$27,886.00","$38,019.00",40.20%,7.60%,52.10%
+11239,Brooklyn,Canarsie and Flatlands,2013,"$26,275.00","$36,453.00",38.90%,6.20%,55.00%
+11239,Brooklyn,Canarsie and Flatlands,2012,"$24,640.00","$35,836.00",39.30%,6.30%,54.50%
+11239,Brooklyn,Canarsie and Flatlands,2011,"$23,941.00","$34,784.00",39.40%,5.30%,55.40%
+11223,Brooklyn,Southern Brooklyn,2015,"$43,019.00","$64,964.00",52.80%,5.70%,41.50%
+11223,Brooklyn,Southern Brooklyn,2014,"$40,873.00","$61,705.00",49.80%,6.00%,44.20%
+11223,Brooklyn,Southern Brooklyn,2013,"$41,328.00","$60,488.00",48.70%,6.30%,45.00%
+11223,Brooklyn,Southern Brooklyn,2012,"$40,960.00","$59,311.00",48.70%,5.80%,45.50%
+11223,Brooklyn,Southern Brooklyn,2011,"$40,626.00","$58,107.00",48.10%,4.60%,47.20%
+11224,Brooklyn,Southern Brooklyn,2015,"$28,006.00","$50,455.00",43.30%,8.10%,48.60%
+11224,Brooklyn,Southern Brooklyn,2014,"$27,011.00","$47,290.00",42.30%,8.10%,49.50%
+11224,Brooklyn,Southern Brooklyn,2013,"$27,481.00","$46,350.00",40.70%,8.20%,51.00%
+11224,Brooklyn,Southern Brooklyn,2012,"$31,415.00","$45,900.00",40.90%,7.80%,51.10%
+11224,Brooklyn,Southern Brooklyn,2011,"$31,822.00","$45,299.00",41.90%,6.30%,51.70%
+11229,Brooklyn,Southern Brooklyn,2015,"$52,168.00","$71,111.00",54.00%,5.00%,41.00%
+11229,Brooklyn,Southern Brooklyn,2014,"$51,985.00","$70,010.00",53.80%,5.60%,40.50%
+11229,Brooklyn,Southern Brooklyn,2013,"$51,725.00","$67,981.00",53.10%,5.50%,41.30%
+11229,Brooklyn,Southern Brooklyn,2012,"$49,629.00","$65,627.00",53.30%,5.00%,41.70%
+11229,Brooklyn,Southern Brooklyn,2011,"$48,683.00","$65,115.00",53.40%,4.70%,41.80%
+11235,Brooklyn,Southern Brooklyn,2015,"$42,818.00","$68,373.00",51.90%,4.80%,43.30%
+11235,Brooklyn,Southern Brooklyn,2014,"$42,257.00","$67,317.00",51.00%,4.80%,44.10%
+11235,Brooklyn,Southern Brooklyn,2013,"$41,639.00","$64,292.00",50.70%,4.50%,44.80%
+11235,Brooklyn,Southern Brooklyn,2012,"$42,298.00","$62,140.00",51.30%,4.40%,44.20%
+11235,Brooklyn,Southern Brooklyn,2011,"$42,492.00","$62,842.00",51.80%,3.80%,44.40%
+11201,Brooklyn,Northwest Brooklyn,2015,"$101,150.00","$152,775.00",65.30%,4.60%,30.10%
+11201,Brooklyn,Northwest Brooklyn,2014,"$98,775.00","$151,787.00",65.30%,5.00%,29.70%
+11201,Brooklyn,Northwest Brooklyn,2013,"$95,369.00","$151,188.00",64.80%,5.30%,29.90%
+11201,Brooklyn,Northwest Brooklyn,2012,"$93,693.00","$149,109.00",64.70%,5.00%,30.40%
+11201,Brooklyn,Northwest Brooklyn,2011,"$91,764.00","$155,523.00",64.50%,5.00%,30.50%
+11205,Brooklyn,Northwest Brooklyn,2015,"$47,575.00","$73,353.00",58.60%,8.70%,32.70%
+11205,Brooklyn,Northwest Brooklyn,2014,"$47,050.00","$73,083.00",57.20%,8.20%,34.70%
+11205,Brooklyn,Northwest Brooklyn,2013,"$44,688.00","$73,758.00",55.70%,7.70%,36.60%
+11205,Brooklyn,Northwest Brooklyn,2012,"$42,434.00","$69,833.00",55.50%,7.10%,37.40%
+11205,Brooklyn,Northwest Brooklyn,2011,"$42,760.00","$66,807.00",55.80%,6.40%,37.80%
+11215,Brooklyn,Northwest Brooklyn,2015,"$103,716.00","$144,180.00",74.10%,4.30%,21.50%
+11215,Brooklyn,Northwest Brooklyn,2014,"$99,040.00","$139,886.00",73.70%,4.90%,21.40%
+11215,Brooklyn,Northwest Brooklyn,2013,"$95,654.00","$132,302.00",72.90%,5.40%,21.70%
+11215,Brooklyn,Northwest Brooklyn,2012,"$93,184.00","$127,597.00",73.30%,5.10%,21.60%
+11215,Brooklyn,Northwest Brooklyn,2011,"$88,450.00","$125,128.00",72.80%,4.90%,22.20%
+11217,Brooklyn,Northwest Brooklyn,2015,"$87,091.00","$126,829.00",68.30%,5.20%,26.60%
+11217,Brooklyn,Northwest Brooklyn,2014,"$85,199.00","$120,590.00",68.00%,6.10%,25.90%
+11217,Brooklyn,Northwest Brooklyn,2013,"$81,862.00","$117,480.00",69.00%,6.40%,24.50%
+11217,Brooklyn,Northwest Brooklyn,2012,"$78,591.00","$111,773.00",69.30%,6.00%,24.70%
+11217,Brooklyn,Northwest Brooklyn,2011,"$74,518.00","$111,074.00",69.10%,6.20%,24.70%
+11231,Brooklyn,Northwest Brooklyn,2015,"$83,310.00","$128,453.00",66.70%,6.60%,26.70%
+11231,Brooklyn,Northwest Brooklyn,2014,"$83,383.00","$118,321.00",66.90%,6.10%,27.00%
+11231,Brooklyn,Northwest Brooklyn,2013,"$78,174.00","$109,631.00",66.40%,6.60%,26.90%
+11231,Brooklyn,Northwest Brooklyn,2012,"$71,999.00","$101,923.00",65.90%,7.00%,27.00%
+11231,Brooklyn,Northwest Brooklyn,2011,"$71,895.00","$101,734.00",66.10%,6.00%,27.90%
+11203,Brooklyn,Flatbush,2015,"$45,936.00","$58,403.00",54.30%,6.70%,39.00%
+11203,Brooklyn,Flatbush,2014,"$46,630.00","$60,629.00",53.50%,7.50%,39.00%
+11203,Brooklyn,Flatbush,2013,"$48,400.00","$61,959.00",54.50%,7.90%,37.60%
+11203,Brooklyn,Flatbush,2012,"$49,002.00","$62,518.00",55.30%,7.60%,37.10%
+11203,Brooklyn,Flatbush,2011,"$48,797.00","$62,792.00",55.70%,7.30%,37.00%
+11210,Brooklyn,Flatbush,2015,"$57,565.00","$77,666.00",56.40%,4.20%,39.40%
+11210,Brooklyn,Flatbush,2014,"$56,052.00","$75,085.00",56.00%,4.80%,39.20%
+11210,Brooklyn,Flatbush,2013,"$55,429.00","$73,990.00",56.80%,5.40%,37.80%
+11210,Brooklyn,Flatbush,2012,"$54,664.00","$73,429.00",57.90%,5.40%,36.70%
+11210,Brooklyn,Flatbush,2011,"$52,895.00","$72,345.00",58.10%,5.70%,36.10%
+11225,Brooklyn,Flatbush,2015,"$44,911.00","$62,860.00",57.50%,10.80%,31.70%
+11225,Brooklyn,Flatbush,2014,"$43,543.00","$59,118.00",55.70%,12.30%,31.90%
+11225,Brooklyn,Flatbush,2013,"$42,922.00","$56,892.00",56.10%,13.00%,30.90%
+11225,Brooklyn,Flatbush,2012,"$40,481.00","$54,283.00",57.00%,12.30%,30.70%
+11225,Brooklyn,Flatbush,2011,"$40,295.00","$53,819.00",58.10%,11.40%,30.50%
+11226,Brooklyn,Flatbush,2015,"$43,399.00","$58,646.00",59.60%,7.30%,33.10%
+11226,Brooklyn,Flatbush,2014,"$42,182.00","$55,874.00",58.60%,8.70%,32.70%
+11226,Brooklyn,Flatbush,2013,"$40,734.00","$54,348.00",57.90%,8.80%,33.20%
+11226,Brooklyn,Flatbush,2012,"$40,146.00","$51,284.00",58.60%,8.50%,32.80%
+11226,Brooklyn,Flatbush,2011,"$39,481.00","$50,667.00",59.20%,8.00%,32.70%
+11207,Brooklyn,East New York and New Lots,2015,"$34,252.00","$47,113.00",50.80%,7.70%,41.40%
+11207,Brooklyn,East New York and New Lots,2014,"$33,816.00","$45,940.00",49.40%,8.30%,42.30%
+11207,Brooklyn,East New York and New Lots,2013,"$32,945.00","$45,365.00",49.00%,8.70%,42.10%
+11207,Brooklyn,East New York and New Lots,2012,"$32,642.00","$44,257.00",49.00%,9.00%,42.00%
+11207,Brooklyn,East New York and New Lots,2011,"$33,127.00","$44,627.00",50.60%,8.80%,40.50%
+11208,Brooklyn,East New York and New Lots,2015,"$35,698.00","$48,043.00",51.10%,5.80%,43.00%
+11208,Brooklyn,East New York and New Lots,2014,"$34,527.00","$45,934.00",48.60%,6.20%,45.10%
+11208,Brooklyn,East New York and New Lots,2013,"$35,079.00","$45,630.00",48.90%,6.70%,44.30%
+11208,Brooklyn,East New York and New Lots,2012,"$35,665.00","$46,578.00",49.90%,5.50%,44.50%
+11208,Brooklyn,East New York and New Lots,2011,"$35,437.00","$46,642.00",51.40%,4.70%,43.80%
+11211,Brooklyn,Greenpoint,2015,"$54,406.00","$84,221.00",64.90%,4.40%,30.80%
+11211,Brooklyn,Greenpoint,2014,"$50,943.00","$77,466.00",64.20%,4.60%,31.20%
+11211,Brooklyn,Greenpoint,2013,"$46,848.00","$70,753.00",61.70%,4.60%,33.70%
+11211,Brooklyn,Greenpoint,2012,"$44,173.00","$66,805.00",61.30%,4.00%,34.60%
+11211,Brooklyn,Greenpoint,2011,"$42,610.00","$62,098.00",60.10%,4.10%,35.70%
+11222,Brooklyn,Greenpoint,2015,"$72,409.00","$87,421.00",71.40%,4.70%,29.30%
+11222,Brooklyn,Greenpoint,2014,"$66,610.00","$80,886.00",69.80%,5.00%,25.20%
+11222,Brooklyn,Greenpoint,2013,"$63,739.00","$79,763.00",69.20%,4.60%,26.10%
+11222,Brooklyn,Greenpoint,2012,"$62,634.00","$77,358.00",69.30%,4.60%,26.00%
+11222,Brooklyn,Greenpoint,2011,"$60,610.00","$74,569.00",68.30%,4.10%,27.40%
+11220,Brooklyn,Sunset Park,2015,"$38,893.00","$54,640.00",57.40%,6.00%,36.50%
+11220,Brooklyn,Sunset Park,2014,"$38,052.00","$53,315.00",56.90%,6.80%,36.20%
+11220,Brooklyn,Sunset Park,2013,"$37,580.00","$53,080.00",57.20%,7.40%,35.40%
+11220,Brooklyn,Sunset Park,2012,"$38,267.00","$53,053.00",56.90%,7.00%,36.10%
+11220,Brooklyn,Sunset Park,2011,"$37,822.00","$52,252.00",57.70%,6.20%,36.10%
+11232,Brooklyn,Sunset Park,2015,"$44,474.00","$60,019.00",58.30%,5.70%,35.90%
+11232,Brooklyn,Sunset Park,2014,"$44,583.00","$59,324.00",57.80%,6.90%,35.20%
+11232,Brooklyn,Sunset Park,2013,"$43,595.00","$57,917.00",57.60%,7.30%,35.10%
+11232,Brooklyn,Sunset Park,2012,"$40,565.00","$55,104.00",56.20%,6.70%,37.00%
+11232,Brooklyn,Sunset Park,2011,"$38,353.00","$54,763.00",54.70%,6.50%,38.90%
+11206,Brooklyn,Bushwick and Williamsburg,2015,"$30,779.00","$49,425.00",53.90%,8.20%,38.00%
+11206,Brooklyn,Bushwick and Williamsburg,2014,"$30,686.00","$47,277.00",52.40%,8.50%,39.10%
+11206,Brooklyn,Bushwick and Williamsburg,2013,"$28,559.00","$43,235.00",51.20%,8.40%,40.40%
+11206,Brooklyn,Bushwick and Williamsburg,2012,"$28,584.00","$42,018.00",51.00%,8.00%,41.00%
+11206,Brooklyn,Bushwick and Williamsburg,2011,"$28,114.00","$41,829.00",51.10%,7.30%,41.50%
+11221,Brooklyn,Bushwick and Williamsburg,2015,"$40,635.00","$54,815.00",54.40%,11.60%,34.00%
+11221,Brooklyn,Bushwick and Williamsburg,2014,"$39,785.00","$53,275.00",53.20%,11.50%,35.20%
+11221,Brooklyn,Bushwick and Williamsburg,2013,"$39,178.00","$51,952.00",53.20%,10.70%,36.10%
+11221,Brooklyn,Bushwick and Williamsburg,2012,"$37,608.00","$49,853.00",51.70%,9.80%,38.40%
+11221,Brooklyn,Bushwick and Williamsburg,2011,"$36,577.00","$48,517.00",51.50%,8.30%,40.20%
+11237,Brooklyn,Bushwick and Williamsburg,2015,"$44,950.00","$62,004.00",62.50%,9.40%,28.20%
+11237,Brooklyn,Bushwick and Williamsburg,2014,"$42,496.00","$57,515.00",60.50%,8.90%,30.50%
+11237,Brooklyn,Bushwick and Williamsburg,2013,"$40,372.00","$53,955.00",57.90%,8.40%,33.70%
+11237,Brooklyn,Bushwick and Williamsburg,2012,"$37,636.00","$48,695.00",57.30%,5.70%,36.90%
+11237,Brooklyn,Bushwick and Williamsburg,2011,"$37,648.00","$47,206.00",57.60%,3.70%,38.60%
+10026,Manhattan,Central Harlem,2015,,,,,
+10026,Manhattan,Central Harlem,2014,,,,,
+10026,Manhattan,Central Harlem,2013,,,,,
+10026,Manhattan,Central Harlem,2012,,,,,
+10026,Manhattan,Central Harlem,2011,,,,,
+10027,Manhattan,Central Harlem,2015,,,,,
+10027,Manhattan,Central Harlem,2014,,,,,
+10027,Manhattan,Central Harlem,2013,,,,,
+10027,Manhattan,Central Harlem,2012,,,,,
+10027,Manhattan,Central Harlem,2011,,,,,
+10030,Manhattan,Central Harlem,2015,,,,,
+10030,Manhattan,Central Harlem,2014,,,,,
+10030,Manhattan,Central Harlem,2013,,,,,
+10030,Manhattan,Central Harlem,2012,,,,,
+10030,Manhattan,Central Harlem,2011,,,,,
+10037,Manhattan,Central Harlem,2015,,,,,
+10037,Manhattan,Central Harlem,2014,,,,,
+10037,Manhattan,Central Harlem,2013,,,,,
+10037,Manhattan,Central Harlem,2012,,,,,
+10037,Manhattan,Central Harlem,2011,,,,,
+10039,Manhattan,Central Harlem,2015,,,,,
+10039,Manhattan,Central Harlem,2014,,,,,
+10039,Manhattan,Central Harlem,2013,,,,,
+10039,Manhattan,Central Harlem,2012,,,,,
+10039,Manhattan,Central Harlem,2011,,,,,
+,Manhattan,Chelsea and Clinton,2015,,,,,
+,Manhattan,Chelsea and Clinton,2014,,,,,
+,Manhattan,Chelsea and Clinton,2013,,,,,
+,Manhattan,Chelsea and Clinton,2012,,,,,
+,Manhattan,Chelsea and Clinton,2011,,,,,
+,Manhattan,Chelsea and Clinton,2015,,,,,
+,Manhattan,Chelsea and Clinton,2014,,,,,
+,Manhattan,Chelsea and Clinton,2013,,,,,
+,Manhattan,Chelsea and Clinton,2012,,,,,
+,Manhattan,Chelsea and Clinton,2011,,,,,
+,Manhattan,Chelsea and Clinton,2015,,,,,
+,Manhattan,Chelsea and Clinton,2014,,,,,
+,Manhattan,Chelsea and Clinton,2013,,,,,
+,Manhattan,Chelsea and Clinton,2012,,,,,
+,Manhattan,Chelsea and Clinton,2011,,,,,
+,Manhattan,Chelsea and Clinton,2015,,,,,
+,Manhattan,Chelsea and Clinton,2014,,,,,
+,Manhattan,Chelsea and Clinton,2013,,,,,
+,Manhattan,Chelsea and Clinton,2012,,,,,
+,Manhattan,Chelsea and Clinton,2011,,,,,
+,Manhattan,Chelsea and Clinton,2015,,,,,
+,Manhattan,Chelsea and Clinton,2014,,,,,
+,Manhattan,Chelsea and Clinton,2013,,,,,
+,Manhattan,Chelsea and Clinton,2012,,,,,
+,Manhattan,Chelsea and Clinton,2011,,,,,
+,Manhattan,Chelsea and Clinton,2015,,,,,
+,Manhattan,Chelsea and Clinton,2014,,,,,
+,Manhattan,Chelsea and Clinton,2013,,,,,
+,Manhattan,Chelsea and Clinton,2012,,,,,
+,Manhattan,Chelsea and Clinton,2011,,,,,
+,Manhattan,East Harlem,2015,,,,,
+,Manhattan,East Harlem,2014,,,,,
+,Manhattan,East Harlem,2013,,,,,
+,Manhattan,East Harlem,2012,,,,,
+,Manhattan,East Harlem,2011,,,,,
+,Manhattan,East Harlem,2015,,,,,
+,Manhattan,East Harlem,2014,,,,,
+,Manhattan,East Harlem,2013,,,,,
+,Manhattan,East Harlem,2012,,,,,
+,Manhattan,East Harlem,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
+,Manhattan,,2015,,,,,
+,Manhattan,,2014,,,,,
+,Manhattan,,2013,,,,,
+,Manhattan,,2012,,,,,
+,Manhattan,,2011,,,,,
