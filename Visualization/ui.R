@@ -7,6 +7,7 @@ shinyUI(fluidPage(
                      tabPanel("Map View"),
                      tabPanel("ZIP Code Data"),
                      tabPanel("About the gentrifAI team"),
+  position = "static-top",
   sliderInput("Year", "Gentrification Prediction by Year:", min = as.Date("2000","%Y"), max = as.Date("2030","%Y"), 
               value = as.Date("2020", "%Y"), timeFormat = "%Y"),                     
   #Likely won't use the pull down menu option here, but leaving the code in and commented out
