@@ -12,13 +12,13 @@ gdata$lat <- as.numeric(gdata$Latitude)
 
 gdatatable <- datatable(gdata[as.numeric(c(1, 2, 29, 8, 27)), drop = FALSE])
 
-# sliderValue <- reactive({
-#   Value = as.character(c(input$pickyear))})
+#For now, I have this feeding the table and it's fixed at "2010", but I want it to pull in the reactive
+#year from my slider.
+mydatatable <- gdata[gdata$Year == "2010", c("ZIP", "Borough", "Year", "Probability", "AGI", "Price_Index")]
 
-mydatatable <- gdata[gdata$Year == "2012", c("ZIP", "Borough", "Probability", "AGI", "Price_Index")]
-
+#For now, I have this feeding the map and it's also fixed at "2010", but I want it to pull in the reactive
+#year from my slider.
 gdata2010 <- gdata[gdata$Year == "2010", ]
-
 
 data.SP <- SpatialPointsDataFrame(gdata[,c(23, 24)], gdata[,-c(23,24)])
 
@@ -43,10 +43,12 @@ icons <- awesomeIcons(
 )
 
 shinyServer(function(input, output, session) {
-    
+  
+  yeartest <- reactive(as.numeric(input$pickyear))  
+  #output$yearvalue <- renderText(as.numeric(input$pickyear))
+  output$yearvalue <- renderText(as.numeric(input$pickyear))
+  
   output$mymap <- renderLeaflet({
-      # sliderInput("Year", "Gentrification Prediction by Year:", min = as.Date("2000","%Y"), max = as.Date("2030","%Y"), 
-      #           value = as.Date("2020", "%Y"), timeFormat = "%Y")                     
       leaflet() %>% 
       #addTiles() %>%
         addProviderTiles("Esri.WorldTopoMap") %>%
@@ -59,8 +61,6 @@ shinyServer(function(input, output, session) {
                                        "<b>Year</b>", Year,"<br>","<b>Average Income</b>", AGI, sep = " "))   
   })
 
-  #output$mytable <- renderDataTable(gdatatable, scrollX = TRUE, target = column, cols = c(1,3))
-  #output$mytable <- renderDataTable(gdatatable, scrollX = TRUE)
   
   output$mytable <- renderDataTable(mydatatable)
   

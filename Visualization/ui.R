@@ -4,9 +4,6 @@ library(shinydashboard)
 library(DT)
 
 
-#header <- dashboardHeader(tags$li(class = "dropdown", tags$a(target="_blank", tags$img(height = "20px", alt="SNAP Logo", 
-#                                                                                                         src="white_logo.png", height = '300', width = '50'))))
-
 header <- dashboardHeader(title = "")
 
 sidebar <- dashboardSidebar(
@@ -28,15 +25,16 @@ body <- dashboardBody(
     br(), br(),
     column(width = 6,
            box(title = "Gentrification Map of New York City", width = NULL, solidHeader = TRUE, status = "primary",
-               sliderInput("pickyear", "Select a Year:", min = as.Date("2000","%Y"), max = as.Date("2030","%Y"), 
-                           value = as.Date("2010", "%Y"), timeFormat = "%Y"), tags$br(),
+               sliderInput("pickyear", "Select a Year:", min = 2000, max = 2030, 
+                           value = 2010, sep = ""), tags$br(),
                leafletOutput("mymap")
                )),
 
 
     column(width = 6,
          box(title = "Top Gentrified ZIP Codes", width = NULL, solidHeader = TRUE, status = "primary",
-             dataTableOutput("mytable"))
+             dataTableOutput("mytable")),
+         box(textOutput("yearvalue"))
   )
   ))
 
