@@ -2,7 +2,7 @@ library(shiny)
 library(leaflet)
 library(shinydashboard)
 library(DT)
-
+library(sp)
 
 header <- dashboardHeader(title = "")
 
