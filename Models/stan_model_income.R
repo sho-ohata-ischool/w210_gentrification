@@ -2,6 +2,8 @@ library(rstan)
 library(RColorBrewer)
 library(data.table)
 
+options(mc.cores = parallel::detectCores())
+
 stan_file <- file.path(getwd(),"Models","stan_files","housing_price.stan") #where the STAN model is saved
 df <- data.table(read.csv((file.path(getwd(),"Data","Income_Home_Prices_ZIP_v2.csv"))))
 df$ZIP <- as.factor(df$ZIP)
@@ -26,5 +28,7 @@ id <- as.numeric(as.factor(df_mod$ZIP)) ## each group, i.e. zip code
 
 #run the model
 stan_data <- list(N=N,J=J,K=K,id=id,X=predictors,y=response)
-model = stan(stan_file, data = stan_data, chains = 0)
-m_hier<-stan(fit=model,file=stan_file, data = stan_data)
+#model = stan(stan_file, data = stan_data, chains = 0)
+m_hier<-stan(fit=model,file=stan_file, data = stan_data, chains=1)
+
+fit_summary <- summary(m_hier)
