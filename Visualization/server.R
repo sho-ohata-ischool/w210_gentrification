@@ -2,6 +2,7 @@ library(shiny)
 library(leaflet)
 library(shinydashboard)
 library(DT)
+library(sp)
 
 
 gdata <- read.csv("Income_Home_Prices_ZIP.csv")
@@ -12,13 +13,11 @@ gdata$lat <- as.numeric(gdata$Latitude)
 
 gdatatable <- datatable(gdata[as.numeric(c(1, 2, 29, 8, 27)), drop = FALSE])
 
-#For now, I have this feeding the table and it's fixed at "2010", but I want it to pull in the reactive
-#year from my slider.
-mydatatable <- gdata[gdata$Year == "2010", c("ZIP", "Borough", "Year", "Probability", "AGI", "Price_Index")]
+# Data frame sorted by gentrification probability (largest to lowest)
+gdata_prob <- gdata[rev(order(gdata$Probability)),]
 
-#For now, I have this feeding the map and it's also fixed at "2010", but I want it to pull in the reactive
-#year from my slider.
-gdata2010 <- gdata[gdata$Year == "2010", ]
+# Smaller data frame to only keep columns for table in UI
+mydatatable <- gdata_prob[, c("ZIP", "Borough", "Year", "Probability", "AGI", "Price_Index")]
 
 data.SP <- SpatialPointsDataFrame(gdata[,c(23, 24)], gdata[,-c(23,24)])
 
@@ -44,8 +43,13 @@ icons <- awesomeIcons(
 
 shinyServer(function(input, output, session) {
   
-  yeartest <- reactive(as.numeric(input$pickyear))  
-  #output$yearvalue <- renderText(as.numeric(input$pickyear))
+  filtered_data <- reactive({
+    data <- mydatatable[mydatatable$Year == input$pickyear,]
+    n <- length(data$Year)
+    rownames(data) <- 1:n
+    data
+  })
+  
   output$yearvalue <- renderText(as.numeric(input$pickyear))
   
   output$mymap <- renderLeaflet({
@@ -56,15 +60,14 @@ shinyServer(function(input, output, session) {
       # addAwesomeMarkers(data = gdata, clusterOptions = markerClusterOptions(), lng = ~Longitude, lat = ~Latitude, icon = icons,
       #           popup = ~paste("<b>ZIP Code:</b>", ZIP, "<br>", "<b>Neighborhood:</b>", Neighborhood,"<br>",
       #                         "<b>Year</b>", Year,"<br>","<b>Average Income</b>", AGI, sep = " "))
-      addAwesomeMarkers(data = gdata2010, clusterOptions = markerClusterOptions(), lng = ~Longitude, lat = ~Latitude, icon = icons,
+      addAwesomeMarkers(data = gdata[gdata$Year == input$pickyear,], clusterOptions = markerClusterOptions(), lng = ~Longitude, lat = ~Latitude, icon = icons,
                         popup = ~paste("<b>ZIP Code:</b>", ZIP, "<br>", "<b>Neighborhood:</b>", Neighborhood,"<br>",
                                        "<b>Year</b>", Year,"<br>","<b>Average Income</b>", AGI, sep = " "))   
   })
 
-  
-  output$mytable <- renderDataTable(mydatatable)
+  output$mytable <- renderDataTable(filtered_data())
   
 })  
 
-shinyApp(ui, server)
+#shinyApp(ui, server=shinyServer)
 
