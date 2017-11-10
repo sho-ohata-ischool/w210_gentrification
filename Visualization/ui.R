@@ -4,6 +4,8 @@ library(shinydashboard)
 library(DT)
 library(sp)
 
+library(ggplot2)
+
 header <- dashboardHeader(title = "")
 
 sidebar <- dashboardSidebar(
@@ -26,15 +28,25 @@ body <- dashboardBody(
     column(width = 6,
            box(title = "Gentrification Map of New York City", width = NULL, solidHeader = TRUE, status = "primary",
                sliderInput("pickyear", "Select a Year:", min = 2000, max = 2030, 
-                           value = 2010, sep = ""), tags$br(),
-               leafletOutput("mymap")
+                           value = 2010, sep = ""), 
+               tags$br(),
+               leafletOutput("mymap"), 
+               tags$br(),
+               tags$img(src = "legend.png",  height = 150, width = 240)
                )),
 
 
     column(width = 6,
          box(title = "Top Gentrified ZIP Codes", width = NULL, solidHeader = TRUE, status = "primary",
              dataTableOutput("mytable")),
-         box(textOutput("yearvalue"))
+         uiOutput("top5zips")
+         ,
+         plotOutput("houseplot"),
+         plotOutput("incomeplot")
+         #dataTableOutput("AGI")
+         #textOutput("AGI")
+         #box(textOutput("yearvalue"))
+         
   )
   ))
 
