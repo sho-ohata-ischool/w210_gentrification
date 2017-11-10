@@ -4,7 +4,7 @@ library(shinydashboard)
 library(DT)
 library(sp)
 
-gdata <- read.csv("Income_Home_Prices_ZIP.csv")
+#gdata <- read.csv("Income_Home_Prices_ZIP.csv")
 
 library(ggplot2)
 
