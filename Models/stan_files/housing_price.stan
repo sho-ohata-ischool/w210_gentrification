@@ -1,11 +1,14 @@
 /*A simple example of an hierarchical model*/
 data {
   int N; //the number of observations
-  int J; //the number of neighborhoods
+  int N_pred; //number of observations for new prediction
+  int J; //the number of zip codes
   int K; //number of columns in the model matrix
   int id[N]; //vector of group indices
+  int id_pred[N_pred]; //vector of prediction group indices
   matrix[N,K] X; //the model matrix
   vector[N] y; //the response variable
+  matrix[n,K] X_pred; //data being fed in for data we have
 }
 parameters {
   vector[K] gamma; //population-level regression coefficients
@@ -42,4 +45,11 @@ model {
 
   //likelihood
   y ~ normal(mu,sigma);
+}
+
+generated quantities { 
+  vector y_sim[N_pred]
+  for(n in 1:N_pred) {
+    y_sim[n] = X_pred[n] * beta[id_pred[n]] + alpha;
+  }
 }
