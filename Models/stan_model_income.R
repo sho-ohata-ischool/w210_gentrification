@@ -37,7 +37,6 @@ zip_levels <- levels(as.factor(df_mod$ZIP)) ##to map back id to zip
 
 #run the model
 stan_data <- list(N=N,N_pred=N_pred,J=J,K=K,id=id,id_pred=id_pred,X=predictors,X_pred=X_pred,y=response)
-#model = stan(stan_file, data = stan_data, chains = 0)
-m_hier<-stan(fit=model,file=stan_file, data = stan_data, chains=4)
+m_hier<-stan(file=stan_file, data = stan_data, chains=4)
 
-fit_summary <- summary(m_hier)
+fit_summary <- summary(m_hier)$summary

@@ -8,7 +8,7 @@ data {
   int id_pred[N_pred]; //vector of prediction group indices
   matrix[N,K] X; //the model matrix
   vector[N] y; //the response variable
-  matrix[n,K] X_pred; //data being fed in for data we have
+  matrix[N_pred,K] X_pred; //data being fed in for data we have
 }
 parameters {
   vector[K] gamma; //population-level regression coefficients
@@ -48,8 +48,9 @@ model {
 }
 
 generated quantities { 
-  vector y_sim[N_pred]
+  vector [N_pred] y_sim;
+  
   for(n in 1:N_pred) {
-    y_sim[n] = X_pred[n] * beta[id_pred[n]] + alpha;
+    y_sim[n] = normal_rng(X_pred[n] * beta[id_pred[n]] + alpha, sigma);
   }
 }
