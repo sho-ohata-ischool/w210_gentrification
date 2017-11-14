@@ -175,6 +175,7 @@ shinyServer(function(input, output, session) {
   # Plot for Income
   output$incomeplot <- renderPlot({
     zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
     zip_data <- gdataplot[gdataplot$ZIP == zz, 
                           c("Year", "AGI_num", "Price_Index",
                             "IncomeLow", "IncomeHigh", "HouseLow", "HouseHigh")]
@@ -191,6 +192,7 @@ shinyServer(function(input, output, session) {
   # Plot for House Index
   output$houseplot <- renderPlot({
     zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
     zip_data <- gdataplot[gdataplot$ZIP == zz, 
                           c("Year", "AGI_num", "Price_Index",
                             "IncomeLow", "IncomeHigh", "HouseLow", "HouseHigh")]
