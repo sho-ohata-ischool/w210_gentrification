@@ -3,7 +3,6 @@ library(leaflet)
 library(shinydashboard)
 library(DT)
 library(sp)
-
 library(ggplot2)
 
 header <- dashboardHeader(title = "")
@@ -19,34 +18,25 @@ sidebar <- dashboardSidebar(
 
 body <- dashboardBody(
   fluidRow(
-    # column(width = 3,
-    #        box(width = NULL, solidHeader = TRUE, status = "primary",
-    #            sliderInput("Year", "Gentrification Prediction by Year:", min = as.Date("2000","%Y"), max = as.Date("2030","%Y"), 
-    #                        value = as.Date("2020", "%Y"), timeFormat = "%Y"),
-  
     br(), br(),
     column(width = 6,
            box(title = "Gentrification Map of New York City", width = NULL, solidHeader = TRUE, status = "primary",
                sliderInput("pickyear", "Select a Year:", min = 2000, max = 2030, 
                            value = 2010, sep = ""), 
                tags$br(),
-               leafletOutput("mymap"), 
-               tags$br(),
-               tags$img(src = "legend.png",  height = 150, width = 240)
+               leafletOutput("mymap")
+               #, 
+               #tags$br(),
+               #tags$img(src = "legend.png",  height = 150, width = 240)
                )),
 
 
     column(width = 6,
          box(title = "Top Gentrified ZIP Codes", width = NULL, solidHeader = TRUE, status = "primary",
              dataTableOutput("mytable")),
-         uiOutput("top5zips")
-         ,
+         #uiOutput("top5zips"),
          plotOutput("houseplot"),
          plotOutput("incomeplot")
-         #dataTableOutput("AGI")
-         #textOutput("AGI")
-         #box(textOutput("yearvalue"))
-         
   )
   ))
 
