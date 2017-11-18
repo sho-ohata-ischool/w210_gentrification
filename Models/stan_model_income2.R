@@ -7,11 +7,19 @@ options(mc.cores = parallel::detectCores())
 stan_file <- file.path(getwd(),"Models","stan_files","housing_price2.stan") #where the STAN model is saved
 df <- data.table(read.csv((file.path(getwd(),"Data","Income_Home_Prices_ZIP_v2.csv"))))
 df[,CRIME_COUNTperSqMile:=CRIME_COUNT/LandSqMile]
-##df$ZIP <- as.factor(df$ZIP)
+df[is.na(Number.of.Subway.Stations.in.ZIP),Number.of.Subway.Stations.in.ZIP:=0]
+df[is.na(Number.of.Subway.Lines.Serving.ZIP), Number.of.Subway.Lines.Serving.ZIP:=0]
+df[,Num_stat_cat:=ifelse(Number.of.Subway.Lines.Serving.ZIP==0, 0, ifelse(Number.of.Subway.Lines.Serving.ZIP < 3, "1-2", "3+"))]
+
+##Other data
+#df_zillow <- fread(file.path(getwd(), "Data", "Zillow_by_Zip_year.csv"))
+df_crime <- fread(file.path(getwd(), "Data", "NYC violent crime yearly count.csv"))
+df_crime <- merge(df_crime,unique(df[,.(ZIP, LandSqMile)]),by.x="Zip_Code", by.y="ZIP")
+df_crime <- df_crime[,CRIME_COUNTperSqMile:=CRIME_COUNT/LandSqMile][YEAR==2016] ##for prediction
+#df_permit <- fread(file.path(getwd(), "Data", "NYC permit yearly count.csv"))
 
 ## Create input data to stan
-#df_mod <- df[,.(ZIP, Year, AGIadj2015, AdjacentIncome, ZillowAdj2, AdjacentZillow2, CRIME_COUNT, Number.of.Subway.Stations.in.ZIP)]
-df_mod <- df[,.(ZIP, Borough, Year, AGIadj2015, AdjacentIncome, Bordering.Water, ZillowAdj2, AdjacentZillow2, CRIME_COUNTperSqMile)]
+df_mod <- df[,.(ZIP, Borough, Year, AGIadj2015, AdjacentIncome, Bordering.Water, ZillowAdj2, AdjacentZillow2, CRIME_COUNTperSqMile, Num_stat_cat)]
 df_mod[,prev_crime:=c(NA,CRIME_COUNTperSqMile),by=ZIP]
 df_mod[,prev_AGI:=c(NA,AGIadj2015),by=ZIP]
 df_mod[,prev_zillow:=c(NA,ZillowAdj2),by=ZIP]
@@ -32,14 +40,16 @@ N_pred <- nrow(df_pred)
 J <- length(unique(df_mod$ZIP)) #number of zip-codes
 K <- ncol(predictors) #number of regression coefficients
 B <- length(unique(df_mod$Borough))
+S <- length(unique(df_mod$Num_stat_cat))
 boro <- as.numeric(as.factor(df_mod$Borough))
 water <- as.numeric(as.factor(df_mod$Bordering.Water))
+station <- as.numeric(as.factor(df_mod$Num_stat_cat))
 id <- as.numeric(as.factor(df_mod$ZIP)) ## each group, i.e. zip code
 id_pred <- as.numeric(as.factor(df_pred$ZIP)) ## each group, i.e. zip code
 zip_levels <- levels(as.factor(df_mod$ZIP)) ##to map back id to zip
 
 #run the model
-stan_data <- list(N=N,N_pred=N_pred,J=J,K=K,zip=id,zip_pred=id_pred,boro=boro,B=B,water=water,X=predictors,X_pred=X_pred,y=response)
+stan_data <- list(N=N,N_pred=N_pred,J=J,K=K,zip=id,zip_pred=id_pred,boro=boro,B=B,water=water,station=station, S=S,X=predictors,X_pred=X_pred,y=response)
 m_hier<-stan(file=stan_file, data = stan_data, chains=4)
 
 fit_summary <- summary(m_hier)$summary

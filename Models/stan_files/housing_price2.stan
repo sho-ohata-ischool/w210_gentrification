@@ -3,17 +3,19 @@ data {
   int N_pred; //number of observations for new prediction
   int J; //the number of zip codes
   int K; //number of columns in the model matrix
-  int zip[N]; //vector of group indices
-  int zip_pred[N_pred]; //vector of prediction group indices
-  int boro[N]; //vector of zip to borough
+  int zip[N]; //vector of zip indices
+  int zip_pred[N_pred]; //vector of zip prediction indices
+  int boro[N]; //vector of borough
   int B; //number of boroughs
+  int S; //number of categories for amount of subway stations
+  int station[N]; //vector of station categorical variable
   int water[N]; //vector of waterfront binary variable
   matrix[N,K] X; //the model matrix
-  vector[N] y; //the response variable
-  matrix[N_pred,K] X_pred; //data being fed in for data we have
+  vector[N] y; //the response variable e.g. zillow price
+  matrix[N_pred,K] X_pred; //data being fed in for prediction
 }
 parameters {
-  vector[K] tau; //the standard deviation of the regression coefficients
+  vector[K] tau; 
   vector[B] alpha1; 
   vector[2] alpha2;
   vector[1] delta;
@@ -25,7 +27,7 @@ transformed parameters {
   vector[N] gamma; 
   vector[K] beta[J]; 
   for(n in 1:N){
-    gamma[n] = alpha1[boro[n]] + alpha2[water[n]];
+    gamma[n] = alpha1[boro[n]] + alpha2[water[n]]; // intercept of boroughs
   }
   
   for(j in 1:J){
@@ -38,9 +40,9 @@ model {
   //priors
   alpha ~ normal(0,5); //weakly informative priors on the regression coefficients
   tau ~ cauchy(0,2.5); //weakly informative priors, see section 6.9 in STAN user guide
-  gamma ~ normal(0,5); //weakly informative priors on the regression coefficients
-  alpha1 ~ cauchy(0,2.5); //weakly informative priors, see section 6.9 in STAN user guide
-  alpha2 ~ gamma(2,0.1); //weakly informative priors, see section 6.9 in STAN user guide
+  gamma ~ gamma(1.5,0.25); //weakly informative priors on the regression coefficients
+  alpha1 ~ normal(0,1); //weakly informative priors, see section 6.9 in STAN user guide
+  alpha2 ~ normal(0,1); //weakly informative priors, see section 6.9 in STAN user guide
   sigma ~ gamma(2,0.1); //weakly informative priors, see section 6.9 in STAN user guide
   for(j in 1:J){
     beta_raw[j] ~ normal(0,5); //fill the matrix of group-level regression coefficients 
