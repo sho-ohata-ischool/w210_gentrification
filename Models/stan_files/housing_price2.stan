@@ -38,19 +38,17 @@ transformed parameters {
 model {
   vector[N] mu; //linear predictor
   //priors
-  alpha ~ normal(0,5); //weakly informative priors on the regression coefficients
-  tau ~ cauchy(0,2.5); //weakly informative priors, see section 6.9 in STAN user guide
-  gamma ~ gamma(1.5,0.25); //weakly informative priors on the regression coefficients
-  alpha1 ~ normal(0,1); //weakly informative priors, see section 6.9 in STAN user guide
-  alpha2 ~ normal(0,1); //weakly informative priors, see section 6.9 in STAN user guide
+  alpha ~ normal(0,1); 
+  tau ~ normal(0,1);
+  gamma ~ gamma(1.5,0.25); // intercept > 0
+  alpha1 ~ gamma(0.5,1); //weakly informative priors, see section 6.9 in STAN user guide
+  alpha2 ~ gamma(0.5,1); //weakly informative priors, see section 6.9 in STAN user guide
   sigma ~ gamma(2,0.1); //weakly informative priors, see section 6.9 in STAN user guide
-  for(j in 1:J){
-    beta_raw[j] ~ normal(0,5); //fill the matrix of group-level regression coefficients 
-  }
-  //for(j in 1:J){
-   //beta[j] ~ normal(gamma,tau); //fill the matrix of group-level regression coefficients 
-  //}
   
+  for(j in 1:J){
+    beta_raw[j] ~ normal(0,1); //fill the matrix of group-level regression coefficients 
+  }
+
   for(n in 1:N){
     mu[n] = X[n] * beta[zip[n]] + gamma[n]; //compute the linear predictor using relevant group-level regression coefficients 
   }
