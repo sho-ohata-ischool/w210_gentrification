@@ -57,3 +57,5 @@ m_hier<-stan(file=stan_file, data = stan_data, chains=4)
 fit_summary <- summary(m_hier)$summary
 pred_out <- data.frame(fit_summary[grep("y_sim", rownames(fit_summary)),])
 pred_out$Zip <- zip_levels
+
+shinystan::launch_shinystan(m_hier) ##For parameter diagnostics
