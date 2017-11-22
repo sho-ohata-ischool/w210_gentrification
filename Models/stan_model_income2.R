@@ -14,7 +14,7 @@ df[is.na(Number.of.Subway.Lines.Serving.ZIP), Number.of.Subway.Lines.Serving.ZIP
 df[,Num_stat_cat:=ifelse(Number.of.Subway.Lines.Serving.ZIP==0, 0, ifelse(Number.of.Subway.Lines.Serving.ZIP < 3, "1-2", "3+"))]
 
 ##Other data
-#df_zillow <- fread(file.path(getwd(), "Data", "Zillow_by_Zip_year.csv"))
+df_zillow <- fread(file.path(getwd(), "Data", "Zillow2016_2017_Yearly_byZipcode.csv"))
 df_crime <- fread(file.path(getwd(), "Data", "NYC violent crime yearly count.csv"))
 df_crime <- merge(df_crime,unique(df[,.(ZIP, LandSqMile)]),by.x="Zip_Code", by.y="ZIP")
 df_crime <- df_crime[,CRIME_COUNTperSqMile:=CRIME_COUNT/LandSqMile][YEAR==2016] ##for prediction
@@ -55,7 +55,15 @@ stan_data <- list(N=N,N_pred=N_pred,J=J,K=K,zip=id,zip_pred=id_pred,boro=boro,B=
 m_hier<-stan(file=stan_file, data = stan_data, chains=4)
 
 fit_summary <- summary(m_hier)$summary
-pred_out <- data.frame(fit_summary[grep("y_sim", rownames(fit_summary)),])
+pred_out <- data.frame(fit_summary[grep("y_sim", rownames(fit_summary)),]) ##stan model prediction for 2016
 pred_out$Zip <- zip_levels
 
 shinystan::launch_shinystan(m_hier) ##For parameter diagnostics
+
+## Base line model to predict 2016
+ols <- lm(ZillowAdj2 ~ log_prev_AGI + prev_zillow + log_prev_crime, data=df_mod)
+ols_coef <- ols$coefficients
+pred_out$base_pred <- ols_coef[1] + df_pred$log_AGI * ols_coef[2] + df_pred$ZillowAdj2 * ols_coef[3] + df_pred$log_crime * ols_coef[4]
+pred_out <- merge(pred_out, df_zillow[Year==2016][,.(ZIP_Code, ZillowAdj2)], by.x="Zip", by.y="ZIP_Code")
+MAPE_stan <- sum(abs(pred_out$mean - pred_out$ZillowAdj2)/pred_out$ZillowAdj2)/dim(pred_out)[1]
+MAPE_base <- sum(abs(pred_out$base_pred - pred_out$ZillowAdj2)/pred_out$ZillowAdj2)/dim(pred_out)[1]
