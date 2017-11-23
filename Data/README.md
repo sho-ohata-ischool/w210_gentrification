@@ -1,6 +1,6 @@
 # Data
 
-NYC DOB processed raw data with zip: https://storage.googleapis.com/dob-data/NYC/NYC_DOB_data_processed.csv
+NYC DOB full cleaned data with zip: https://storage.googleapis.com/dob-data/NYC/DOB_Permit_cleaned.csv
 
 NYC Crime processed data non-violent with zip: https://storage.googleapis.com/crime-data/nyc/nyc_crime_nonviolent_with_zip.csv
 
