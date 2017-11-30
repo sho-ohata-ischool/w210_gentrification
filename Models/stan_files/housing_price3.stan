@@ -6,6 +6,7 @@ data {
   int zip[N]; //vector of zip indices
   int zip_pred[N_pred]; //vector of zip prediction indices
   int boro[N]; //vector of borough
+  int boro_pred[N_pred];
   int B; //number of boroughs
   int S; //number of categories for amount of subway stations
   int station[N]; //vector of station categorical variable
@@ -14,53 +15,52 @@ data {
   vector[N] y; //the response variable e.g. zillow price
   matrix[N_pred,K] X_pred; //data being fed in for prediction
 }
+
 parameters {
-  vector[K] tau; 
-  vector[B] alpha1; 
-  vector[2] alpha2;
-  vector[1] delta;
-  vector[K] beta_raw[J];
-  real sigma; //standard deviation of the individual observations
-  real alpha; //intercept
+  vector[K] betas[B]; //the regression parameters
+  real phi; //the variance parameter
 }
+
 transformed parameters {
-  vector[N] gamma; 
-  vector[K] beta[J]; 
-  for(n in 1:N){
-    gamma[n] = alpha1[boro[n]] + alpha2[water[n]]; // intercept of boroughs
-  }
+  vector[N] mu; //the expected values (linear predictor)
+  vector[N] alpha; //shape parameter for the gamma distribution
+  vector[N] beta; //rate parameter for the gamma distribution
+  vector[K] gamma; //population-level regression coefficients
+  vector[K] tau; //the standard deviation of the regression coefficients
   
-  for(j in 1:J){
-    beta[j] = alpha + tau .* beta_raw[j];
+  for (i in 1:N){
+    mu = exp(X * betas[boro[i]]); //using the log link 
   }
+  alpha = mu .* mu / phi; 
+  beta = mu / phi;
 }
 
-model {
-  vector[N] mu; //linear predictor
-  //priors
-  alpha ~ normal(0,1); 
-  tau ~ normal(0,1);
-  gamma ~ gamma(1.5,0.25); // intercept > 0
-  alpha1 ~ gamma(0.5,1); //weakly informative priors, see section 6.9 in STAN user guide
-  alpha2 ~ gamma(0.5,1); //weakly informative priors, see section 6.9 in STAN user guide
-  sigma ~ gamma(2,0.1); //weakly informative priors, see section 6.9 in STAN user guide
+model {  
+  //betas[1] ~ cauchy(0,1); //prior for the intercept following Gelman 2008
+
+  //for(i in 2:K) {
+  // betas[i] ~ cauchy(0,2.5);//prior for the slopes following Gelman 2008
+  //}
   
-  for(j in 1:J){
-    beta_raw[j] ~ normal(0,1); //fill the matrix of group-level regression coefficients 
+  //gamma ~ normal(0,5); //weakly informative priors on the regression coefficients
+  //tau ~ cauchy(0,2.5); 
+  
+  for (b in 1:B) {
+    betas[b] ~ cauchy(1,2.5);
   }
-
-  for(n in 1:N){
-    mu[n] = X[n] * beta[zip[n]] + gamma[n]; //compute the linear predictor using relevant group-level regression coefficients 
-  }
-
-  //likelihood
-  y ~ normal(mu,sigma);
+  
+  y ~ gamma(alpha,beta);
 }
-
-generated quantities { 
-  vector [N_pred] y_sim;
-  
-  for(n in 1:N_pred) {
-    y_sim[n] = normal_rng(X_pred[n] * beta[zip_pred[n]] + gamma[n], sigma);
-  }
+generated quantities {
+ vector[N_pred] y_sim;
+ vector[N_pred] mu_pred;
+ vector[N_pred] alpha_pred;
+ vector[N_pred] beta_pred;
+ 
+ for(n in 1:N_pred){
+  mu_pred[n] = exp(X_pred[n] * betas[boro_pred[n]]);
+  alpha_pred[n] = mu_pred[n] * mu_pred[n] / phi;
+  beta_pred[n] = mu_pred[n] / phi;
+  y_sim[n] = gamma_rng(alpha_pred[n],beta_pred[n]); //posterior draws to get posterior predictive checks
+ }
 }

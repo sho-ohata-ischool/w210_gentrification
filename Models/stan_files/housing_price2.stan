@@ -6,6 +6,7 @@ data {
   int zip[N]; //vector of zip indices
   int zip_pred[N_pred]; //vector of zip prediction indices
   int boro[N]; //vector of borough
+  int boro_pred[N_pred];
   int B; //number of boroughs
   int S; //number of categories for amount of subway stations
   int station[N]; //vector of station categorical variable
@@ -25,7 +26,7 @@ transformed parameters {
   vector[N] alpha; //shape parameter for the gamma distribution
   vector[N] beta; //rate parameter for the gamma distribution
   
-  mu = exp(X*betas); //using the log link 
+  mu = exp(X * betas); //using the log link 
   alpha = mu .* mu / phi; 
   beta = mu / phi;
 }
@@ -33,9 +34,9 @@ transformed parameters {
 model {  
   betas[1] ~ cauchy(0,10); //prior for the intercept following Gelman 2008
 
-  for(i in 2:K)
+  for(i in 2:K) {
    betas[i] ~ cauchy(0,2.5);//prior for the slopes following Gelman 2008
-  
+  }
   y ~ gamma(alpha,beta);
 }
 generated quantities {

@@ -26,10 +26,10 @@ colnames(df_crime)[1:2] <- c("ZIP", "Year")
 df_permit <- fread(file.path(getwd(), "Data", "nyc_permit_yearly_count.csv"))
 df_permit <- dcast(df_permit, `Zip Code` + `Filing Year` ~ `Job Type`, value.var = c("Count"))
 colnames(df_permit)[1:2] <- c("ZIP", "Year")
-df_permit[,NB_lag1:=shift(NB,1),by=ZIP]
-df_permit[,A1_lag1:=shift(A1,1),by=ZIP]
+df_permit[,NB_lag1:=log(shift(as.double(NB),1)+1.001),by=ZIP]
+df_permit[,A1_lag1:=log(shift(as.double(A1),1)+1.001),by=ZIP]
 df_permit[,A2_lag1:=shift(A2,1),by=ZIP]
-df_permit[,DM_lag2:=shift(DM,2), by=ZIP]
+df_permit[,DM_lag2:=log(shift(as.double(DM),2)+1.001), by=ZIP]
 df_permit <- df_permit[Year==2016 | Year==2017]
 
 ## Create input data to stan
@@ -37,25 +37,25 @@ df_mod <- df[,.(ZIP, Borough, Year, log_AGI, AdjacentIncome, Bordering.Water, Zi
 df_mod[,log_prev_crime:=shift(log_crime,1),by=ZIP]
 df_mod[,log_prev_AGI:=shift(log_AGI,1),by=ZIP]
 df_mod[,prev_zillow:=shift(ZillowAdj2,1),by=ZIP]
-df_mod[,NB_lag1:=shift(NB,1),by=ZIP]
-df_mod[,A1_lag1:=shift(A1,1),by=ZIP]
+df_mod[,NB_lag1:=log(shift(as.double(NB),1)+1.001),by=ZIP]
+df_mod[,A1_lag1:=log(shift(as.double(A1),1)+1.001),by=ZIP]
 #df_mod[,A2_lag1:=shift(A2,1),by=ZIP]
-df_mod[,DM_lag2:=shift(DM,2), by=ZIP]
+df_mod[,DM_lag2:=log(shift(as.double(DM),2)+1.001), by=ZIP]
 df_mod <- df_mod[complete.cases(df_mod)] ##for now not back-filling data
 #predictors <- as.matrix(df_mod[,.(log_prev_AGI, prev_zillow, log_prev_crime, NB_lag1, A1_lag1, A2_lag1, DM_lag2)])
-#predictors <- as.matrix(df_mod[,.(prev_zillow, log_prev_crime, NB_lag1, A1_lag1, DM_lag2)])
-predictors <- as.matrix(df_mod[,.(prev_zillow, log_prev_crime)])
+predictors <- as.matrix(df_mod[,.(prev_zillow, log_prev_crime, NB_lag1, A1_lag1, DM_lag2)])
+#predictors <- as.matrix(df_mod[,.(prev_zillow, log_prev_crime)])
 response <- df_mod$ZillowAdj2
 
 ## Create data for prediction
-#df_pred <- df[,.(ZIP, Year, ZillowAdj2, log_crime, A1_lag1=A1, NB_lag1=NB, DM_lag2=shift(DM, 1))]
-df_pred <- df[,.(ZIP, Year, ZillowAdj2, log_crime)]
+df_pred <- df[,.(ZIP, Year, ZillowAdj2, log_crime, A1_lag1=log(as.double(A1)+1.001), NB_lag1=log(as.double(NB)+1.001), DM_lag2=shift(log(as.double(DM)+1.001), 1))]
+#df_pred <- df[,.(ZIP, Year, ZillowAdj2, log_crime)]
 df_pred <- df_pred[Year==2015]
-#merged <- cbind(merge(df_zillow[,.(ZIP, Year, ZillowAdj2)][Year==2016], df_crime, by.x=c("ZIP", "Year"), by.y=c("ZIP", "Year")), df_permit[Year==2017][,.(A1_lag1, NB_lag1,DM_lag2)])
-merged <- merge(df_zillow[,.(ZIP, Year, ZillowAdj2)][Year==2016], df_crime, by.x=c("ZIP", "Year"), by.y=c("ZIP", "Year"))
-merged <- merged[,.(ZIP, Year, ZillowAdj2, log_crime)]
-df_pred <- rbind(df_pred, merged)
-X_pred <- as.matrix(df_pred[,.(ZillowAdj2, log_crime)])
+merged <- cbind(merge(df_zillow[,.(ZIP, Year, ZillowAdj2)][Year==2016], df_crime, by.x=c("ZIP", "Year"), by.y=c("ZIP", "Year")), df_permit[Year==2017][,.(A1_lag1, NB_lag1,DM_lag2)])
+#merged <- merge(df_zillow[,.(ZIP, Year, ZillowAdj2)][Year==2016], df_crime, by.x=c("ZIP", "Year"), by.y=c("ZIP", "Year"))
+merged <- merged[,.(ZIP, Year, ZillowAdj2, log_crime, A1_lag1, NB_lag1,DM_lag2)]
+df_pred <- merge(rbind(df_pred, merged), unique(df_mod[,.(ZIP, Borough)]), by=c("ZIP"))
+X_pred <- as.matrix(df_pred[,.(ZillowAdj2, log_crime, A1_lag1, NB_lag1,DM_lag2)])
 
 ##Parameters to be passed to stan
 N <- nrow(df_mod) #number of observations
@@ -65,6 +65,7 @@ K <- ncol(predictors) #number of regression coefficients
 B <- length(unique(df_mod$Borough))
 S <- length(unique(df_mod$Num_stat_cat))
 boro <- as.numeric(as.factor(df_mod$Borough))
+boro_pred <- as.numeric(as.factor(df_pred$Borough))
 water <- as.numeric(as.factor(df_mod$Bordering.Water))
 station <- as.numeric(as.factor(df_mod$Num_stat_cat))
 id <- as.numeric(as.factor(df_mod$ZIP)) ## each group, i.e. zip code
@@ -72,15 +73,16 @@ id_pred <- as.numeric(as.factor(df_pred$ZIP)) ## each group, i.e. zip code
 zip_levels <- levels(as.factor(df_mod$ZIP)) ##to map back id to zip
 
 #run the model
-stan_data <- list(N=N,N_pred=N_pred,J=J,K=K,zip=id,zip_pred=id_pred,boro=boro,B=B,water=water,station=station, S=S,X=predictors,X_pred=X_pred,y=response)
+stan_data <- list(N=N,N_pred=N_pred,J=J,K=K,zip=id,zip_pred=id_pred,boro=boro,
+                  boro_pred=boro_pred,B=B,water=water,station=station, S=S,X=predictors,X_pred=X_pred,y=response)
 m_hier<-stan(file=stan_file, data = stan_data, chains=4)
 
 fit_summary <- summary(m_hier)$summary
 pred_out <- data.frame(fit_summary[grep("y_sim", rownames(fit_summary)),]) ##stan model prediction for 2016
 #pred_out$ZIP <- zip_levels
 #pred_out$Year <- rep(2016, 175)
-pred_out$ZIP <- rep(zip_levels,2)
-pred_out$Year <- rep(2016:2017,each=175)
+pred_out$ZIP <- rep(zip_levels,each=2)
+pred_out$Year <- rep(2016:2017,175)
 
 #shinystan::launch_shinystan(m_hier) ##For parameter diagnostics
 
