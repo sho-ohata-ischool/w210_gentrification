@@ -73,7 +73,7 @@ m_hier<-stan(file=stan_file, data = stan_data, chains=4)
 
 fit_summary <- summary(m_hier)$summary
 pred_out <- data.frame(fit_summary[grep("y_sim", rownames(fit_summary)),]) ##stan model prediction for 2016
-pred_out$ZIP <- zip_levels
+pred_out$ZIP <- rep(zip_levels,2)
 pred_out$Year <- rep(2016:2017,each=175)
 
 shinystan::launch_shinystan(m_hier) ##For parameter diagnostics
