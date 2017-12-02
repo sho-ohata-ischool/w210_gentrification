@@ -42,9 +42,8 @@ df_mod[,A1_lag1:=log(shift(as.double(A1),1)+1.001),by=ZIP]
 #df_mod[,A2_lag1:=shift(A2,1),by=ZIP]
 df_mod[,DM_lag2:=log(shift(as.double(DM),2)+1.001), by=ZIP]
 df_mod <- df_mod[complete.cases(df_mod)] ##for now not back-filling data
-#predictors <- as.matrix(df_mod[,.(log_prev_AGI, prev_zillow, log_prev_crime, NB_lag1, A1_lag1, A2_lag1, DM_lag2)])
-predictors <- as.matrix(df_mod[,.(prev_zillow, log_prev_crime, NB_lag1, A1_lag1, DM_lag2)])
-#predictors <- as.matrix(df_mod[,.(prev_zillow, log_prev_crime)])
+df_mod[,intercept:=rep(1,nrow(df_mod))]
+predictors <- as.matrix(df_mod[,.(intercept, prev_zillow, log_prev_crime, NB_lag1, A1_lag1, DM_lag2)])
 response <- df_mod$ZillowAdj2
 
 ## Create data for prediction
@@ -55,7 +54,8 @@ merged <- cbind(merge(df_zillow[,.(ZIP, Year, ZillowAdj2)][Year==2016], df_crime
 #merged <- merge(df_zillow[,.(ZIP, Year, ZillowAdj2)][Year==2016], df_crime, by.x=c("ZIP", "Year"), by.y=c("ZIP", "Year"))
 merged <- merged[,.(ZIP, Year, ZillowAdj2, log_crime, A1_lag1, NB_lag1,DM_lag2)]
 df_pred <- merge(rbind(df_pred, merged), unique(df_mod[,.(ZIP, Borough)]), by=c("ZIP"))
-X_pred <- as.matrix(df_pred[,.(ZillowAdj2, log_crime, A1_lag1, NB_lag1,DM_lag2)])
+df_pred[,intercept:=rep(1,nrow(df_pred))]
+X_pred <- as.matrix(df_pred[,.(intercept, ZillowAdj2, log_crime, A1_lag1, NB_lag1, DM_lag2)])
 
 ##Parameters to be passed to stan
 N <- nrow(df_mod) #number of observations
@@ -73,9 +73,11 @@ id_pred <- as.numeric(as.factor(df_pred$ZIP)) ## each group, i.e. zip code
 zip_levels <- levels(as.factor(df_mod$ZIP)) ##to map back id to zip
 
 #run the model
-stan_data <- list(N=N,N_pred=N_pred,J=J,K=K,zip=id,zip_pred=id_pred,boro=boro,
-                  boro_pred=boro_pred,B=B,water=water,station=station, S=S,X=predictors,X_pred=X_pred,y=response)
-m_hier<-stan(file=stan_file, data = stan_data, chains=1)
+stan_data <- list(N=N,N_pred=N_pred,J=J,K=K,zip=id,zip_pred=id_pred,
+                  boro=boro,boro_pred=boro_pred,B=B,
+                  ##water=water,station=station, S=S,
+                  X=predictors,X_pred=X_pred,y=response)
+m_hier<-stan(file=stan_file, data = stan_data, chains=4)
 
 fit_summary <- summary(m_hier)$summary
 pred_out <- data.frame(fit_summary[grep("y_sim", rownames(fit_summary)),]) ##stan model prediction for 2016

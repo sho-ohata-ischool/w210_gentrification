@@ -8,9 +8,9 @@ data {
   int boro[N]; //vector of borough
   int boro_pred[N_pred];
   int B; //number of boroughs
-  int S; //number of categories for amount of subway stations
-  int station[N]; //vector of station categorical variable
-  int water[N]; //vector of waterfront binary variable
+  //int S; //number of categories for amount of subway stations
+  //int station[N]; //vector of station categorical variable
+  //int water[N]; //vector of waterfront binary variable
   matrix[N,K] X; //the model matrix
   vector[N] y; //the response variable e.g. zillow price
   matrix[N_pred,K] X_pred; //data being fed in for prediction
@@ -18,36 +18,34 @@ data {
 
 parameters {
   vector[K] betas[B]; //the regression parameters
-  real phi; //the variance parameter
+  real <lower=0, upper=2> phi; //the variance parameter
 }
 
 transformed parameters {
   vector[N] mu; //the expected values (linear predictor)
   vector[N] alpha; //shape parameter for the gamma distribution
   vector[N] beta; //rate parameter for the gamma distribution
-  vector[K] gamma; //population-level regression coefficients
-  vector[K] tau; //the standard deviation of the regression coefficients
+  //vector[K] gamma; //population-level regression coefficients
+  //vector[K] tau; //the standard deviation of the regression coefficients
   
-  for (i in 1:N){
-    mu = exp(X * betas[boro[i]]); //using the log link 
+  for (n in 1:N){
+    mu[n] = exp(X[n] * betas[boro[n]]); //using the log link 
   }
   alpha = mu .* mu / phi; 
   beta = mu / phi;
 }
 
-model {  
-  //betas[1] ~ cauchy(0,1); //prior for the intercept following Gelman 2008
-
-  //for(i in 2:K) {
-  // betas[i] ~ cauchy(0,2.5);//prior for the slopes following Gelman 2008
-  //}
+model {
+  for (b in 1:B){
+    betas[b, 1] ~ cauchy(0,1); //prior for the intercept following Gelman 2008
+  
+    for(i in 2:K) {
+     betas[b, i] ~ cauchy(0,2.5);//prior for the slopes following Gelman 2008
+    }
+  }
   
   //gamma ~ normal(0,5); //weakly informative priors on the regression coefficients
   //tau ~ cauchy(0,2.5); 
-  
-  for (b in 1:B) {
-    betas[b] ~ cauchy(1,2.5);
-  }
   
   y ~ gamma(alpha,beta);
 }
