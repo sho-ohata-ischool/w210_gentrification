@@ -20,9 +20,9 @@ body <- dashboardBody(
   fluidRow(
     br(), br(),
     column(width = 6,
-           box(title = "Gentrification Map of New York City", width = NULL, solidHeader = TRUE, status = "primary",
-               sliderInput("pickyear", "Select a Year:", min = 2000, max = 2030, 
-                           value = 2010, sep = ""), 
+           box(title = "Gentrification Map of New York City", width = NULL, solidHeader = FALSE, status = "primary",
+               sliderInput("pickyear", "Select a Year:", min = 2000, max = 2025, 
+                           value = 2010, sep = "", width = '50%'), 
                tags$br(),
                leafletOutput("mymap")
                #, 
@@ -32,7 +32,7 @@ body <- dashboardBody(
 
 
     column(width = 6,
-         box(title = "Top Gentrified ZIP Codes", width = NULL, solidHeader = TRUE, status = "primary",
+         box(title = "Top Gentrified ZIP Codes", width = NULL, solidHeader = FALSE, status = "primary",
              dataTableOutput("mytable")),
          #uiOutput("top5zips"),
          plotOutput("houseplot"),

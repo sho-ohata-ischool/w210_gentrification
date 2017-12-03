@@ -25,8 +25,8 @@ ui <- fluidPage(
     
     # Sidebar panel for inputs ----
     sidebarPanel(width = 6,
-      sliderInput("pickyear", "Select Gentrification Year:", min = 2000, max = 2030, 
-                  value = 2010, sep = ""),
+      sliderInput("pickyear", "Select Gentrification Year:", min = 2000, max = 2025, 
+                  value = 2010, sep = "", width = "50%"),
       #textOutput("yearvaluetext"),
       #tags$head(tags$style("#yearvaluetext{color: purple;
       #                     font-size: 30px;
