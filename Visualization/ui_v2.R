@@ -11,7 +11,8 @@ ui <- fluidPage(
   tags$head(tags$style(
     HTML('
          #sidebar {
-         background-color: #dec4de;
+         background-color: white;
+         border-width: 0px;
          }
          ')
   )),
@@ -24,13 +25,9 @@ ui <- fluidPage(
   sidebarLayout(
     
     # Sidebar panel for inputs ----
-    sidebarPanel(width = 6,
+    sidebarPanel(id="sidebar",width = 6,
       sliderInput("pickyear", "Select Gentrification Year:", min = 2000, max = 2025, 
                   value = 2010, sep = "", width = "50%"),
-      #textOutput("yearvaluetext"),
-      #tags$head(tags$style("#yearvaluetext{color: purple;
-      #                     font-size: 30px;
-      #                     font-weight: bold;}")),
       br(), 
       br(),
       leafletOutput("mymap")
@@ -46,7 +43,28 @@ ui <- fluidPage(
       br(),
       
       tabsetPanel(type = "tabs",
-                  tabPanel("Table", dataTableOutput("mytable")),
+                  tabPanel("Table", 
+                           tags$h5("Select a row in the table for zip code level analysis in GentriFacts and GentriStats"),
+                           tags$head(
+                             tags$style(HTML("
+                                             h5 {
+                                             font-size: 15px;
+                                             font-style: italic;
+                                             color: #396a93;
+                                             }
+                                             
+                                             "))
+                             ),
+                           
+                           textOutput("selectzip3"),
+                           tags$head(tags$style("#selectzip3{color: #396a93;
+                                                font-size: 15px;
+                                                font-weight: bold;
+                                                }"
+                                                )
+                           ),
+                           br(),
+                           dataTableOutput("mytable")),
                   tabPanel("GentriStats", 
                            textOutput("selectzip"),
                            tags$head(tags$style("#selectzip{color: #396a93;
