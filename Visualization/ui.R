@@ -5,45 +5,95 @@ library(DT)
 library(sp)
 library(ggplot2)
 
-header <- dashboardHeader(title = "")
 
-sidebar <- dashboardSidebar(
-  sidebarMenu(width = 1, tags$img(src = "white_logo.png", height = 100, width = 225),
-    menuItem("Map View", tabname = "mapview", selected = TRUE, icon = icon("map")),
-    menuItem("Charts", tabname = "charts", selected = TRUE, icon = icon("line-chart")),
-    menuItem("About gentrifAI", tabname = "aboutus", selected = TRUE, icon = icon("user-circle")),
-  textOutput("res")
-))
-
-
-body <- dashboardBody(
-  fluidRow(
-    br(), br(),
-    column(width = 6,
-           box(title = "Gentrification Map of New York City", width = NULL, solidHeader = FALSE, status = "primary",
-               sliderInput("pickyear", "Select a Year:", min = 2000, max = 2025, 
-                           value = 2010, sep = "", width = '50%'), 
-               tags$br(),
-               leafletOutput("mymap")
-               #, 
-               #tags$br(),
-               #tags$img(src = "legend.png",  height = 150, width = 240)
-               )),
-
-
-    column(width = 6,
-         box(title = "Top Gentrified ZIP Codes", width = NULL, solidHeader = FALSE, status = "primary",
-             dataTableOutput("mytable")),
-         #uiOutput("top5zips"),
-         plotOutput("houseplot"),
-         plotOutput("incomeplot")
+ui <- fluidPage(
+  
+  tags$head(tags$style(
+    HTML('
+         #sidebar {
+         background-color: #dec4de;
+         }
+         ')
+  )),
+  
+  # App title ----
+  titlePanel(tags$img(src = "PRIMARY_logo_transparent_background.png",  height = 50, width = 120)),
+  
+  
+  # Sidebar layout with input and output definitions ----
+  sidebarLayout(
+    
+    # Sidebar panel for inputs ----
+    sidebarPanel(width = 6,
+      sliderInput("pickyear", "Select Gentrification Year:", min = 2000, max = 2025, 
+                  value = 2010, sep = "", width = "50%"),
+      #textOutput("yearvaluetext"),
+      #tags$head(tags$style("#yearvaluetext{color: purple;
+      #                     font-size: 30px;
+      #                     font-weight: bold;}")),
+      br(), 
+      br(),
+      leafletOutput("mymap")
+    ),
+    
+    
+    mainPanel(width = 6,
+      #sliderInput("pickyear", "Select Gentrification Year:", min = 2000, max = 2030, 
+      #            value = 2010, sep = ""),
+      textOutput("yearvaluetext"),
+      tags$head(tags$style("#yearvaluetext{color: purple;
+                                           font-size: 25px;font-weight: bold;}")),
+      br(),
+      
+      tabsetPanel(type = "tabs",
+                  tabPanel("Table", 
+                           tags$h5("Select a row in the table for zip code level analysis in GentriFacts and GentriStats"),
+                           tags$head(
+                             tags$style(HTML("
+                                             h5 {
+                                             font-size: 15px;
+                                             font-style: italic;
+                                             color: #396a93;
+                                             }
+                                             
+                                             "))
+                             ),
+                           
+                           textOutput("selectzip3"),
+                           tags$head(tags$style("#selectzip3{color: #396a93;
+                                                font-size: 15px;
+                                                font-weight: bold;
+                                                }"
+                                                )
+                           ),
+                           br(),
+                           dataTableOutput("mytable")),
+                  tabPanel("GentriStats", 
+                           textOutput("selectzip"),
+                           tags$head(tags$style("#selectzip{color: #396a93;
+                                                font-size: 20px;
+                                                font-weight: bold;
+                                                }"
+                                                )
+                           ),
+                           br(),
+                           fluidRow(
+                             column(6, plotOutput("houseplot")),
+                             column(6, plotOutput("incomeplot"))
+                             )
+                           ),
+                           #plotOutput("houseplot"), plotOutput("incomeplot")),
+                  tabPanel("Gentrifacts", 
+                           textOutput("selectzip2"),
+                           tags$head(tags$style("#selectzip2{color: #396a93;
+                                                        font-size: 20px;
+                                                        font-weight: bold;
+                                                        }"
+                                                )
+                                       ),
+                           br()
+                           )
+                  )
+    )
   )
-  ))
-
-
-ui <- dashboardPage(
-  header,
-  sidebar,
-  body
 )
-

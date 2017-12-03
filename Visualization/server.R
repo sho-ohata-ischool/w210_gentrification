@@ -128,6 +128,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$yearvalue <- renderText(as.numeric(input$pickyear))
+  output$yearvaluetext <- renderText(paste("New York City - Year",input$pickyear, sep = " "))
   
   # NYC zip code boundaries map
   output$mymap <- renderLeaflet({
@@ -205,6 +206,25 @@ shinyServer(function(input, output, session) {
       ggtitle(paste("Annual Mean House Index for Zip Code", zz, 
                     sep = " "))
   })
+  
+  output$selectzip <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    paste("  Zip Code:",  zz  , sep = " ")
+  })
+  
+  output$selectzip2 <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    paste("  Zip Code:",  zz  , sep = " ")
+  })
+  
+  output$selectzip3 <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    paste(" Zip code selected:",  zz  , sep = " ")
+  })
+  
   
 })  
 
