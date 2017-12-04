@@ -84,16 +84,17 @@ c2006 <- read.csv("crimes_2006.csv")
 #c2008 <- read.csv("crimes_2008.csv")
 #c2009 <- read.csv("crimes_2009.csv")
 #c2010 <- read.csv("crimes_2010.csv")
-c2011 <- read.csv("crimes_2011.csv")
+#c2011 <- read.csv("crimes_2011.csv")
 #c2012 <- read.csv("crimes_2012.csv")
 #c2013 <- read.csv("crimes_2013.csv")
 #c2014 <- read.csv("crimes_2014.csv")
-#c2015 <- read.csv("crimes_2015.csv")
-c2016 <- read.csv("crimes_2016.csv")
+c2015 <- read.csv("crimes_2015.csv")
+#c2016 <- read.csv("crimes_2016.csv")
 
 c2006$color <- ifelse(c2006$crime_count>=10, "red", "grey")
-c2011$color <- ifelse(c2011$crime_count>=10, "red", "grey")
-c2016$color <- ifelse(c2016$crime_count>=10, "red", "grey")
+#c2011$color <- ifelse(c2011$crime_count>=10, "red", "grey")
+c2015$color <- ifelse(c2015$crime_count>=10, "red", "grey")
+#c2016$color <- ifelse(c2016$crime_count>=10, "red", "grey")
 
 minmax <- read.csv("minmaxlatlon.csv")
 
@@ -263,6 +264,7 @@ shinyServer(function(input, output, session) {
     if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
     
     c2006zc <- c2006[c2006$Zip.Code == zz,]
+    total_crime <- sum(c2006zc$crime_count)
     ymin = minmax[minmax$Zip.Code == zz, "minlat"]
     ymax = minmax[minmax$Zip.Code == zz, "maxlat"]
     xmin = minmax[minmax$Zip.Code == zz, "minlon"]
@@ -273,7 +275,7 @@ shinyServer(function(input, output, session) {
                  color=c2006zc$color,
                  alpha=0.8) +
       coord_cartesian(xlim=c(xmin, xmax),ylim=c(ymin, ymax)) +
-      ggtitle("2006") +
+      ggtitle(paste("2006 - Number of Violent Crimes: ", total_crime,sep = " ")) +
       theme_minimal() +
       theme(plot.title = element_text(hjust = 0.5)) +
       xlab("Longitude") +
@@ -281,45 +283,30 @@ shinyServer(function(input, output, session) {
     
   })
   
-  output$crimeplot2011 <- renderPlot({
+  output$crimeplot2015 <- renderPlot({
     zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
     if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
     
-    c2011zc <- c2011[c2011$Zip.Code == zz,]
+    c2015zc <- c2015[c2015$Zip.Code == zz,]
+    total_crime <- sum(c2015zc$crime_count)
     ymin = minmax[minmax$Zip.Code == zz, "minlat"]
     ymax = minmax[minmax$Zip.Code == zz, "maxlat"]
     xmin = minmax[minmax$Zip.Code == zz, "minlon"]
     xmax = minmax[minmax$Zip.Code == zz, "maxlon"]
     
-    ggplot(c2011zc, aes(LON_TRIM, LAT_TRIM)) +
-      geom_point(size = c2011zc$crime_count/10, 
-                 color=c2011zc$color,
+    ggplot(c2015zc, aes(LON_TRIM, LAT_TRIM)) +
+      geom_point(size = c2015zc$crime_count/10, 
+                 color=c2015zc$color,
                  alpha=0.8) +
+      #geom_point(aes(color=factor(c2016zc$color), size = c2016zc$crime_count/10)) +
+      #theme_minimal() +
+      #scale_color_manual(name ="Number of Crimes",values = c("grey", "red"), 
+      #                   labels=c("Less than 10","Greater or equal to 10"),
+      #                   guide = guide_legend()) +
+      #theme(legend.position = "bottom")  +
+      #scale_size_continuous(guide=FALSE) +
       coord_cartesian(xlim=c(xmin, xmax),ylim=c(ymin, ymax)) +
-      ggtitle("2011") +
-      theme_minimal() +
-      theme(plot.title = element_text(hjust = 0.5)) +
-      xlab("Longitude") +
-      ylab("Latitude")
-    
-  })
-  
-  output$crimeplot2016 <- renderPlot({
-    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
-    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
-    
-    c2016zc <- c2016[c2016$Zip.Code == zz,]
-    ymin = minmax[minmax$Zip.Code == zz, "minlat"]
-    ymax = minmax[minmax$Zip.Code == zz, "maxlat"]
-    xmin = minmax[minmax$Zip.Code == zz, "minlon"]
-    xmax = minmax[minmax$Zip.Code == zz, "maxlon"]
-    
-    ggplot(c2016zc, aes(LON_TRIM, LAT_TRIM)) +
-      geom_point(size = c2016zc$crime_count/10, 
-                 color=c2016zc$color,
-                 alpha=0.8) +
-      coord_cartesian(xlim=c(xmin, xmax),ylim=c(ymin, ymax)) +
-      ggtitle("2016") +
+      ggtitle(paste("2015 - Number of Violent Crimes: ", total_crime,sep = " ")) +
       theme_minimal() +
       theme(plot.title = element_text(hjust = 0.5)) +
       xlab("Longitude") +

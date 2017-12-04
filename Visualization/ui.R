@@ -122,12 +122,14 @@ ui <- fluidPage(
                                                   ),
                                                 fluidRow(
                                                   column(6,plotOutput("crimeplot2006")),
-                                                  column(6,plotOutput("crimeplot2016"))
-                                                )
-                                                #fluidRow(
-                                                #  column(6,plotOutput("crimeplot2016"))
-                                                #)
+                                                  column(6,plotOutput("crimeplot2015"))
                                                 ),
+                                                fluidRow(
+                                                  column(12, align="center",
+                                                         tags$img(src = "crimelegend.png",  height = 30, width = 320))
+                                                )
+                                                ),
+                                       
                                        tabPanel("Building Permits",
                                                 textOutput("selectzipc"),
                                                 tags$head(tags$style("#selectzipc{color: #396a93;
