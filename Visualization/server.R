@@ -78,14 +78,25 @@ getColor2 <- function(Color) {
 }
 
 
+## Crime data
+c2006 <- read.csv("crimes_2006.csv")
+#c2007 <- read.csv("crimes_2007.csv")
+#c2008 <- read.csv("crimes_2008.csv")
+#c2009 <- read.csv("crimes_2009.csv")
+#c2010 <- read.csv("crimes_2010.csv")
+c2011 <- read.csv("crimes_2011.csv")
+#c2012 <- read.csv("crimes_2012.csv")
+#c2013 <- read.csv("crimes_2013.csv")
+#c2014 <- read.csv("crimes_2014.csv")
+#c2015 <- read.csv("crimes_2015.csv")
+c2016 <- read.csv("crimes_2016.csv")
 
-#icons <- awesomeIcons(
-#  icon = 'home',
-#  iconColor = 'black',
-#  library = 'ion',
-#  markerColor = getColor(gdata)
-#)
-#####
+c2006$color <- ifelse(c2006$crime_count>=10, "red", "grey")
+c2011$color <- ifelse(c2011$crime_count>=10, "red", "grey")
+c2016$color <- ifelse(c2016$crime_count>=10, "red", "grey")
+
+minmax <- read.csv("minmaxlatlon.csv")
+
 
 ################
 # SHINY SERVER #
@@ -186,8 +197,9 @@ shinyServer(function(input, output, session) {
              geom_line(aes(y = IncomeLow), colour = "yellowgreen", linetype = "dashed", size = 1) + 
              geom_line(aes(y = IncomeHigh), colour = "orchid2", linetype = "dashed", size = 1) + 
       xlab("Year") + ylab("Income in 2015 $") + # Set axis labels
-      ggtitle(paste("Annual Mean Income for Zip Code", zz, 
-                    sep = " "))
+      #ggtitle(paste("Annual Mean Income for Zip Code", zz, 
+      #              sep = " "))
+      ggtitle("Annual Mean Income")
   })
   
   # Plot for House Index
@@ -203,11 +215,31 @@ shinyServer(function(input, output, session) {
       geom_line(aes(y = HouseLow), colour = "yellowgreen", linetype = "dashed", size = 1) + 
       geom_line(aes(y = HouseHigh), colour = "orchid2", linetype = "dashed", size = 1) + 
       xlab("Year") + ylab("House Index - inflation adjusted") + # Set axis labels
-      ggtitle(paste("Annual Mean House Index for Zip Code", zz, 
-                    sep = " "))
+      #ggtitle(paste("Annual Mean House Index for Zip Code", zz, 
+      #              sep = " "))
+      ggtitle("Annual Mean House Index")
   })
   
   output$selectzip <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    paste("  Zip Code:",  zz  , sep = " ")
+  })
+  
+  
+  output$selectzipa <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    paste("  Zip Code:",  zz  , sep = " ")
+  })
+  
+  output$selectzipb <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    paste("  Zip Code:",  zz  , sep = " ")
+  })
+  
+  output$selectzipc <- renderText({
     zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
     if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
     paste("  Zip Code:",  zz  , sep = " ")
@@ -223,6 +255,76 @@ shinyServer(function(input, output, session) {
     zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
     if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
     paste(" Zip code selected:",  zz  , sep = " ")
+  })
+  
+  
+  output$crimeplot2006 <- renderPlot({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    c2006zc <- c2006[c2006$Zip.Code == zz,]
+    ymin = minmax[minmax$Zip.Code == zz, "minlat"]
+    ymax = minmax[minmax$Zip.Code == zz, "maxlat"]
+    xmin = minmax[minmax$Zip.Code == zz, "minlon"]
+    xmax = minmax[minmax$Zip.Code == zz, "maxlon"]
+    
+    ggplot(c2006zc, aes(LON_TRIM, LAT_TRIM)) +
+      geom_point(size = c2006zc$crime_count/10, 
+                 color=c2006zc$color,
+                 alpha=0.8) +
+      coord_cartesian(xlim=c(xmin, xmax),ylim=c(ymin, ymax)) +
+      ggtitle("2006") +
+      theme_minimal() +
+      theme(plot.title = element_text(hjust = 0.5)) +
+      xlab("Longitude") +
+      ylab("Latitude")
+    
+  })
+  
+  output$crimeplot2011 <- renderPlot({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    c2011zc <- c2011[c2011$Zip.Code == zz,]
+    ymin = minmax[minmax$Zip.Code == zz, "minlat"]
+    ymax = minmax[minmax$Zip.Code == zz, "maxlat"]
+    xmin = minmax[minmax$Zip.Code == zz, "minlon"]
+    xmax = minmax[minmax$Zip.Code == zz, "maxlon"]
+    
+    ggplot(c2011zc, aes(LON_TRIM, LAT_TRIM)) +
+      geom_point(size = c2011zc$crime_count/10, 
+                 color=c2011zc$color,
+                 alpha=0.8) +
+      coord_cartesian(xlim=c(xmin, xmax),ylim=c(ymin, ymax)) +
+      ggtitle("2011") +
+      theme_minimal() +
+      theme(plot.title = element_text(hjust = 0.5)) +
+      xlab("Longitude") +
+      ylab("Latitude")
+    
+  })
+  
+  output$crimeplot2016 <- renderPlot({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    c2016zc <- c2016[c2016$Zip.Code == zz,]
+    ymin = minmax[minmax$Zip.Code == zz, "minlat"]
+    ymax = minmax[minmax$Zip.Code == zz, "maxlat"]
+    xmin = minmax[minmax$Zip.Code == zz, "minlon"]
+    xmax = minmax[minmax$Zip.Code == zz, "maxlon"]
+    
+    ggplot(c2016zc, aes(LON_TRIM, LAT_TRIM)) +
+      geom_point(size = c2016zc$crime_count/10, 
+                 color=c2016zc$color,
+                 alpha=0.8) +
+      coord_cartesian(xlim=c(xmin, xmax),ylim=c(ymin, ymax)) +
+      ggtitle("2016") +
+      theme_minimal() +
+      theme(plot.title = element_text(hjust = 0.5)) +
+      xlab("Longitude") +
+      ylab("Latitude")
+    
   })
   
   

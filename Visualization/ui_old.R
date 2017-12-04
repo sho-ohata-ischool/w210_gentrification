@@ -11,8 +11,7 @@ ui <- fluidPage(
   tags$head(tags$style(
     HTML('
          #sidebar {
-         background-color: white;
-         border-width: 0px;
+         background-color: #dec4de;
          }
          ')
   )),
@@ -25,9 +24,13 @@ ui <- fluidPage(
   sidebarLayout(
     
     # Sidebar panel for inputs ----
-    sidebarPanel(id="sidebar",width = 6,
+    sidebarPanel(width = 6,
       sliderInput("pickyear", "Select Gentrification Year:", min = 2000, max = 2025, 
                   value = 2010, sep = "", width = "50%"),
+      #textOutput("yearvaluetext"),
+      #tags$head(tags$style("#yearvaluetext{color: purple;
+      #                     font-size: 30px;
+      #                     font-weight: bold;}")),
       br(), 
       br(),
       leafletOutput("mymap")
