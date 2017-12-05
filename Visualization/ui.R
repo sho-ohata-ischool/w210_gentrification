@@ -66,13 +66,6 @@ ui <- fluidPage(
                            dataTableOutput("mytable")),
                   
                   tabPanel("GentriStats", 
-                           #textOutput("selectzip"),
-                           #tags$head(tags$style("#selectzip{color: #396a93;
-                          #                      font-size: 20px;
-                          #                      font-weight: bold;
-                           #                     }"
-                          #                      )
-                          # ),
                            br(),
                            
                            tabsetPanel(type = "tabs",
@@ -101,6 +94,7 @@ ui <- fluidPage(
                                                   column(6, plotOutput("incomeplot"))
                                                   )
                                                 ),
+                                       
                                        tabPanel("Crimes",
                                                 
                                                 textOutput("selectzipb"),
@@ -109,7 +103,7 @@ ui <- fluidPage(
                                                                      font-weight: bold;
                                                                      }")),
                                                 
-                                                tags$h6("Number of violent crimes in zip code area"),
+                                                tags$h6("Historical number of violent crimes in zip code area"),
                                                 tags$head(
                                                   tags$style(HTML("
                                                                   h6 {
@@ -135,13 +129,45 @@ ui <- fluidPage(
                                                 tags$head(tags$style("#selectzipc{color: #396a93;
                                                                      font-size: 20px;
                                                                      font-weight: bold;
-                                                                     }"))
+                                                                     }")),
+                                                tags$h6("Historical heatmap of building permits in zip code area"),
+                                                tags$head(
+                                                  tags$style(HTML("
+                                                                  h6 {
+                                                                  font-size: 15px;
+                                                                  font-style: bold;
+                                                                  color: #396a93;
+                                                                  }
+                                                                  
+                                                                  "))
+                                                  ),
+                                                fluidRow(
+                                                  column(6,tags$h6("In 2006")),
+                                                  column(6,tags$h6("In 2016"))
+                                                ),
+                                                fluidRow(
+                                                  column(6,leafletOutput("permitplot2006")),
+                                                  column(6,leafletOutput("permitplot2016"))
+                                                ),
+                                                
+                                                fluidRow(
+                                                  column(6,
+                                                         textOutput("permit2006count"),
+                                                         tags$head(tags$style("#permit2006count{color: #396a93;
+                                                                              font-size: 11px;
+                                                                              font-weight: bold;
+                                                                              }"))
+                                                         ),
+                                                  column(6,
+                                                         textOutput("permit2016count"),
+                                                         tags$head(tags$style("#permit2016count{color: #396a93;
+                                                                              font-size: 11px;
+                                                                              font-weight: bold;
+                                                                              }"))
+                                                         )
+                                                  )
                                                 )
                            )
-                           #fluidRow(
-                           #  column(6, plotOutput("houseplot")),
-                           #  column(6, plotOutput("incomeplot"))
-                           #  )
                            ),
 
                   tabPanel("Gentrifacts", 

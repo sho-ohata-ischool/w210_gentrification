@@ -13,7 +13,7 @@ library(geojsonio)
 ################
 
 # Main data frame
-gdata <- read.csv("Income_Home_Prices_ZIP_v2.csv")
+gdata <- read.csv("Income_Home_Prices_ZIP_v3.csv")
  
 # Longitude and Latitude vectors
 gdata$long <- as.numeric(gdata$Longitude)
@@ -92,17 +92,41 @@ c2015 <- read.csv("crimes_2015.csv")
 #c2016 <- read.csv("crimes_2016.csv")
 
 c2006$color <- ifelse(c2006$crime_count>=10, "red", "grey")
-#c2011$color <- ifelse(c2011$crime_count>=10, "red", "grey")
 c2015$color <- ifelse(c2015$crime_count>=10, "red", "grey")
-#c2016$color <- ifelse(c2016$crime_count>=10, "red", "grey")
-
 minmax <- read.csv("minmaxlatlon.csv")
-
 
 # Zip code area description
 desc <- read.csv("zipdescription2.csv")
 desc['NAME'] <- as.character(desc$NAME)
 desc['description'] <- as.character(desc$description)
+
+
+## Building permits data
+permits2006 <- read.csv("permits2006.csv")
+#permits2014 <- read.csv("permits2014.csv")
+#permits2015 <- read.csv("permits2015.csv")
+permits2016 <- read.csv("permits2016.csv")
+
+permits2006$num_permitsTRIM <- ifelse(permits2006$num_permits >=10, 10, permits2006$num_permits)
+permits2016$num_permitsTRIM <- ifelse(permits2016$num_permits >=10, 10, permits2016$num_permits)
+
+pal <- colorNumeric(
+  palette = "RdYlBu",
+  domain = c(1,2,3,4,5,6,7,8,9,10)
+  #domain = num_permitsTRIM
+)
+
+# custom label format function
+myLabelFormat = function(..., reverse_order = FALSE){ 
+  if(reverse_order){ 
+    function(type = "numeric", cuts){ 
+      cuts <- sort(cuts, decreasing = T)
+    } 
+  }else{
+    labelFormat(...)
+  }
+}
+
 
 ################
 # SHINY SERVER #
@@ -226,6 +250,7 @@ shinyServer(function(input, output, session) {
       ggtitle("Annual Mean House Index")
   })
   
+  # Headers for multiple tabs
   output$selectzip <- renderText({
     zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
     if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
@@ -264,6 +289,7 @@ shinyServer(function(input, output, session) {
   })
   
   
+  # Crime plots - 2006 and 2015
   output$crimeplot2006 <- renderPlot({
     zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
     if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
@@ -319,7 +345,81 @@ shinyServer(function(input, output, session) {
     
   })
   
+  output$permitplot2006 <- renderLeaflet({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+
+    permits_plot <- permits2006[permits2006$zipcode == zz,]
+    num_permitsTRIM <- permits_plot$num_permitsTRIM
+    rev_num_permitsTRIM <- 11 - num_permitsTRIM
+    ziplon <- gdata[gdata$ZIP == zz, 'Longitude'][1]
+    ziplat <- gdata[gdata$ZIP == zz, 'Latitude'][1]
+    
+    leaflet(nyzipcode) %>%
+      addProviderTiles("Esri.WorldTopoMap") %>%
+      setView(lng=ziplon, lat=ziplat, zoom=14) %>% 
+      addPolygons(stroke = TRUE, smoothFactor = 0.3, fillOpacity = 0.5, weight=3, 
+                  color = "black", fillColor = "white") %>%
+      addHeatmap(data=permits_plot, lat = ~LATITUDE, lng = ~LONGITUDE, intensity = ~num_permitsTRIM, #problem with this line!
+                 radius = 7) %>%
+      addLegend("bottomright", pal=pal,
+                values = ~c(1,2,3,4,5,6,7,8,9,10),
+                #values = ~num_permitsTRIM,
+                labFormat = myLabelFormat(reverse_order = T),
+                title = "Count",
+                opacity = 0.75)
+    
+  })
   
+  output$permitplot2016 <- renderLeaflet({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    permits_plot <- permits2016[permits2016$zipcode == zz,]
+    num_permitsTRIM <- permits_plot$num_permitsTRIM
+    rev_num_permitsTRIM <- 11 - num_permitsTRIM
+    ziplon <- gdata[gdata$ZIP == zz, 'Longitude'][1]
+    ziplat <- gdata[gdata$ZIP == zz, 'Latitude'][1]
+    
+    leaflet(nyzipcode) %>%
+      addProviderTiles("Esri.WorldTopoMap") %>%
+      setView(lng=ziplon, lat=ziplat, zoom=14) %>% 
+      addPolygons(stroke = TRUE, smoothFactor = 0.3, fillOpacity = 0.5, weight=3, 
+                  color = "black", fillColor = "white") %>%
+      addHeatmap(data=permits_plot, lat = ~LATITUDE, lng = ~LONGITUDE, intensity = ~num_permitsTRIM, #problem with this line!
+                 radius = 7) %>%
+      addLegend("bottomright", pal=pal,
+                values = ~c(1,2,3,4,5,6,7,8,9,10),
+                #values = ~num_permitsTRIM,
+                labFormat = myLabelFormat(reverse_order = T),  # problem: stops at 7 with red since max =7 in 2016
+                title = "Count",
+                opacity = 0.75)
+    
+  })
+  
+  output$permit2006count <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    a1 <- sum(permits2006[(permits2006$zipcode == zz) & (permits2006$job_type == 'A1'), 'num_permits'])
+    a2 <- sum(permits2006[(permits2006$zipcode == zz) & (permits2006$job_type == 'A2'), 'num_permits'])
+    nb <- sum(permits2006[(permits2006$zipcode == zz) & (permits2006$job_type == 'NB'), 'num_permits'])
+    dm <- sum(permits2006[(permits2006$zipcode == zz) & (permits2006$job_type == 'DM'), 'num_permits'])
+    paste("Count by permit type: A1 =", a1, ", A2 =", a2, ", NB =", nb, ", DM =", dm, sep = " ")
+  })
+  
+  output$permit2016count <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    a1 <- sum(permits2016[(permits2016$zipcode == zz) & (permits2016$job_type == 'A1'), 'num_permits'])
+    a2 <- sum(permits2016[(permits2016$zipcode == zz) & (permits2016$job_type == 'A2'), 'num_permits'])
+    nb <- sum(permits2016[(permits2016$zipcode == zz) & (permits2016$job_type == 'NB'), 'num_permits'])
+    dm <- sum(permits2016[(permits2016$zipcode == zz) & (permits2016$job_type == 'DM'), 'num_permits'])
+    paste("Count by permit type: A1 =", a1, ", A2 =", a2, ", NB =", nb, ", DM =", dm, sep = " ")
+  })
+  
+  # Wikipedia description
   output$description <- renderText({
     zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
     if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
