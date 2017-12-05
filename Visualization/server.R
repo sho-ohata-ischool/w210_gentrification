@@ -39,10 +39,10 @@ nyzipcode <- geojsonio::geojson_read("nyc_zipcode_polygons.geojson",
 
 
 # Color list and functions
-cgent = "#000080"
-clow = "#FFE5CC"
-cmid = "#FFB266"
-chigh = "#FF8000"
+cgent = "#1565C0"
+clow = "#4CAF50"
+cmid = "#FBC02D"
+chigh = "#424242"
 
 getColor <- function(Color) {
   
@@ -66,13 +66,13 @@ getColor2 <- function(Color) {
   if(Color == "blue") { #GENTRIFYING
     "blue"            
   } else if(Color == "green") {  #Not gentrifying - low income
-    "orange"           
+    "green"           
   } else if(Color == "red") { #Not gentrifying - mid income
-    "orange"                 
+    "orange"           
   } else if(Color == "purple") { #Not gentrifying - high income
-    "orange"             
+    "lightgray"             
   } else {  
-    "gray"
+    "black"
   } 
   
 }
