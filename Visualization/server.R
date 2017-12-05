@@ -13,7 +13,7 @@ library(geojsonio)
 ################
 
 # Main data frame
-gdata <- read.csv("Income_Home_Prices_ZIP_v3.csv")
+gdata <- read.csv("Income_Home_Prices_ZIP_viz.csv")
  
 # Longitude and Latitude vectors
 gdata$long <- as.numeric(gdata$Longitude)
@@ -44,15 +44,31 @@ clow = "#4CAF50"
 cmid = "#FBC02D"
 chigh = "#424242"
 
+#getColor <- function(Color) {
+  
+#  if(Color == "blue") { #GENTRIFYING
+#    cgent
+#  } else if(Color == "green") {  #Not gentrifying - low income
+#    clow
+#  } else if(Color == "red") { #Not gentrifying - mid income
+#    cmid   
+#  } else if(Color == "purple") { #Not gentrifying - high income
+#    chigh
+#  } else {  
+#    "gray"
+#  } 
+#  
+#}
+
 getColor <- function(Color) {
   
-  if(Color == "blue") { #GENTRIFYING
+  if(Color == "gent") { #GENTRIFYING
     cgent
-  } else if(Color == "green") {  #Not gentrifying - low income
+  } else if(Color == "no_low") {  #Not gentrifying - low income
     clow
-  } else if(Color == "red") { #Not gentrifying - mid income
+  } else if(Color == "no_mid") { #Not gentrifying - mid income
     cmid   
-  } else if(Color == "purple") { #Not gentrifying - high income
+  } else if(Color == "no_high") { #Not gentrifying - high income
     chigh
   } else {  
     "gray"
@@ -63,13 +79,13 @@ getColor <- function(Color) {
 # Simpler color for the icons since the "awesomeIcons" function only recognize simple colors
 getColor2 <- function(Color) {
   
-  if(Color == "blue") { #GENTRIFYING
+  if(Color == "gent") { #GENTRIFYING
     "blue"            
-  } else if(Color == "green") {  #Not gentrifying - low income
+  } else if(Color == "no_low") {  #Not gentrifying - low income
     "green"           
-  } else if(Color == "red") { #Not gentrifying - mid income
+  } else if(Color == "no_mid") { #Not gentrifying - mid income
     "orange"           
-  } else if(Color == "purple") { #Not gentrifying - high income
+  } else if(Color == "no_high") { #Not gentrifying - high income
     "lightgray"             
   } else {  
     "black"
@@ -182,8 +198,8 @@ shinyServer(function(input, output, session) {
                         popup = ~paste("<b>ZIP Code:</b>", ZIP, "<br>", "<b>Neighborhood:</b>", Neighborhood,"<br>",
                                        "<b>Year</b>", Year,"<br>","<b>Average Income</b>", AGI, sep = " ")) %>%
       addLegend("topleft",   colors =c(cgent, clow, cmid, chigh),
-                labels= c("Gentrifying", "Non-gentrifying (low income)", "Non-gentrifying (mid income)",
-                          "Non-gentrifying (high income)"),
+                labels= c("Gentrifying", "Non-gentrifying (low home value)", "Non-gentrifying (mid home value)",
+                          "Non-gentrifying (high home value)"),
                 title = "Gentrification",
                 opacity = 0.7
       )
@@ -221,6 +237,7 @@ shinyServer(function(input, output, session) {
     zip_data <- gdataplot[gdataplot$ZIP == zz, 
                           c("Year", "AGI_num", "Price_Index",
                             "IncomeLow", "IncomeHigh", "HouseLow", "HouseHigh")]
+    zip_data <- zip_data[zip_data$Year <= 2015,]
     
     ggplot(data=zip_data, aes(x=Year)) +
              geom_line(aes(y = AGI_num), colour = "blue", linetype = "solid", size = 2) + 
@@ -229,7 +246,8 @@ shinyServer(function(input, output, session) {
       xlab("Year") + ylab("Income in 2015 $") + # Set axis labels
       #ggtitle(paste("Annual Mean Income for Zip Code", zz, 
       #              sep = " "))
-      ggtitle("Annual Mean Income")
+      ggtitle("Historical Mean Income from 2005 to 2015") +
+      theme_minimal()
   })
   
   # Plot for House Index
@@ -239,6 +257,7 @@ shinyServer(function(input, output, session) {
     zip_data <- gdataplot[gdataplot$ZIP == zz, 
                           c("Year", "AGI_num", "Price_Index",
                             "IncomeLow", "IncomeHigh", "HouseLow", "HouseHigh")]
+    zip_data <- zip_data[zip_data$Year <= input$pickyear,]
     
     ggplot(data=zip_data, aes(x=Year)) +
       geom_line(aes(y = Price_Index), colour = "blue", linetype = "solid", size = 2) + 
@@ -247,7 +266,8 @@ shinyServer(function(input, output, session) {
       xlab("Year") + ylab("House Index - inflation adjusted") + # Set axis labels
       #ggtitle(paste("Annual Mean House Index for Zip Code", zz, 
       #              sep = " "))
-      ggtitle("Annual Mean House Index")
+      ggtitle(paste("Mean House Index from 2005 to", input$pickyear, sep=" ")) +
+      theme_minimal()
   })
   
   # Headers for multiple tabs

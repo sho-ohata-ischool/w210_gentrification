@@ -26,8 +26,8 @@ ui <- fluidPage(
     
     # Sidebar panel for inputs ----
     sidebarPanel(id="sidebar",width = 6,
-      sliderInput("pickyear", "Select Gentrification Year:", min = 2000, max = 2025, 
-                  value = 2010, sep = "", width = "50%"),
+      sliderInput("pickyear", "Select Gentrification Year:", min = 2005, max = 2025, 
+                  value = 2015, sep = "", width = "50%"),
       br(), 
       br(),
       leafletOutput("mymap", height=500)
