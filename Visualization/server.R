@@ -99,6 +99,11 @@ c2015$color <- ifelse(c2015$crime_count>=10, "red", "grey")
 minmax <- read.csv("minmaxlatlon.csv")
 
 
+# Zip code area description
+desc <- read.csv("zipdescription2.csv")
+desc['NAME'] <- as.character(desc$NAME)
+desc['description'] <- as.character(desc$description)
+
 ################
 # SHINY SERVER #
 ################
@@ -314,6 +319,38 @@ shinyServer(function(input, output, session) {
     
   })
   
+  
+  output$description <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    zztext <- desc[desc$ZIP == zz, 'description']
+    })
+  
+  
+  output$selectname <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    desc['NAME'] <- as.character(desc$NAME)
+    zzname <- desc[desc$ZIP == zz, 'NAME']
+    
+  })
+  
+  output$selectlink <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    zzlink <- desc[desc$ZIP == zz, 'fulllink']
+    paste("link:", zzlink, sep=" ")
+  })
+  
+  output$selectboro <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    zzboro <- desc[desc$ZIP == zz, 'BORO']
+    zzneigh <- desc[desc$ZIP == zz, 'NEIGHBORHOOD']
+    paste(zzneigh,",", zzboro, sep = " ")
+  })
   
 })  
 

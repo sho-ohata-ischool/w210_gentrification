@@ -149,10 +149,21 @@ ui <- fluidPage(
                            tags$head(tags$style("#selectzip2{color: #396a93;
                                                         font-size: 20px;
                                                         font-weight: bold;
-                                                        }"
-                                                )
-                                       ),
-                           br()
+                                                        }")),
+                           textOutput("selectname"),
+                           tags$head(tags$style("#selectname{color: #396a93;
+                                                font-size: 20px;
+                                                font-weight: bold;
+                                                }")),
+                           textOutput("selectboro"),
+                           tags$head(tags$style("#selectboro{color: #396a93;
+                                                font-size: 15px;
+                                                font-weight: normal;
+                                                }")),
+                           
+                           br(),
+                           textOutput("description"),
+                           textOutput("selectlink")
                            )
                   )
     )
