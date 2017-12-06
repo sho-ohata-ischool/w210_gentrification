@@ -1,5 +1,6 @@
 library(shiny)
 library(leaflet)
+library(leaflet.extras)
 library(shinydashboard)
 library(DT)
 library(sp)
@@ -78,20 +79,21 @@ ui <- fluidPage(
                                                                      font-weight: bold;
                                                                      }")),
                                                 
-                                                tags$h6("House Value and Income over Time from 2005 for Selected Zip Code"),
-                                                tags$head(
-                                                  tags$style(HTML("
-                                                                  h6 {
-                                                                  font-size: 15px;
-                                                                  font-style: bold;
-                                                                  color: #396a93;
-                                                                  }
-                                                                  
-                                                                  "))
-                                                  ),
+                                                #tags$h6("House Value and Income over Time from 2005 for Selected Zip Code"),
+                                                #tags$head(
+                                                #  tags$style(HTML("
+                                                #                  h6 {
+                                                #                  font-size: 15px;
+                                                #                  font-style: bold;
+                                                #                  color: #396a93;
+                                                #                  }
+                                                #                  
+                                                #                  "))
+                                                #  ),
+                                                br(),
                                                 fluidRow(
                                                   column(6, plotOutput("houseplot")),
-                                                  column(6, plotOutput("incomeplot"))
+                                                  column(6, plotOutput("probplot"))
                                                   )
                                                 ),
                                        
@@ -189,7 +191,19 @@ ui <- fluidPage(
                            
                            br(),
                            textOutput("description"),
-                           textOutput("selectlink")
+                           textOutput("selectlink"),
+                           br(),
+                           tags$h6("Additional Features"),
+                           tags$head(tags$style(HTML("
+                                                      h6{
+                                                      color: #396a93;
+                                                      font-size: 15px;
+                                                      font-weight: normal;
+                                                      }"))),
+                           textOutput("featwater"),
+                           textOutput("featlines"),
+                           textOutput("featparks"),
+                           textOutput("featplays")
                            )
                   )
     )

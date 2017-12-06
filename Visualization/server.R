@@ -1,5 +1,6 @@
 library(shiny)
 library(leaflet)
+library(leaflet.extras)
 library(shinydashboard)
 library(DT)
 library(sp)
@@ -14,6 +15,12 @@ library(geojsonio)
 
 # Main data frame
 gdata <- read.csv("Income_Home_Prices_ZIP_viz.csv")
+
+# Additional Features for Zip Code description
+myfeaturetable <- gdata[gdata$Year == 2015, c("ZIP", "Bordering.Water","Number.of.Subway.Lines.Serving.ZIP", 
+                                              "Number.of.Parks", "Number.of.Playgrounds")]
+myprobtable <- gdata[gdata$Year >= 2005, c("ZIP", "Year", "alpha", "beta", "HouseHigh")]
+
  
 # Longitude and Latitude vectors
 gdata$long <- as.numeric(gdata$Longitude)
@@ -24,6 +31,7 @@ gdata_prob <- gdata[rev(order(gdata$Probability)),]
 
 # Smaller data frame to only keep columns for table in UI
 mydatatable <- gdata_prob[, c("ZIP", "Borough", "Year", "Probability", "AGI", "Price_Index")]
+
 
 # For line charts
 gdataplot <- gdata[gdata$Year >= 2005, c("ZIP", "Year", "AGI_num", "Price_Index",
@@ -229,6 +237,33 @@ shinyServer(function(input, output, session) {
   #                      "IncomeLow", "IncomeHigh", "HouseLow", "HouseHigh")]
   #  data
   #})
+  
+  
+  # Plot for House Probability
+  output$probplot <- renderPlot({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    zip_data <- myprobtable[myprobtable$ZIP == zz,]
+    zip_data <- zip_data[zip_data$Year == input$pickyear,]
+    
+    alpha <- zip_data$alpha	
+    beta <- zip_data$beta
+    threshold_highvalue <- zip_data$HouseHigh
+    
+    prob <- round((1 - pgamma(threshold_highvalue, shape=alpha, scale=1/beta))*100,0)
+    title1 <- paste("Probability greater than NYC top 1/3 indices:", prob, "%", sep=" ")
+    
+    dfgamma <- data.frame(HouseIndex = rgamma(100000, shape=alpha, scale=1/beta))
+    #fillcolor <- ifelse(dfgamma$HouseIndex<threshold_highvalue, "white", "blue")
+    
+    ggplot(dfgamma, aes(HouseIndex)) + 
+      geom_density(alpha = 0.2, color='grey', fill="blue") + 
+      geom_vline(xintercept=threshold_highvalue, color='purple', linetype = "longdash") +
+      ggtitle(title1) +
+      theme_minimal() +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  })
+  
   
   # Plot for Income
   output$incomeplot <- renderPlot({
@@ -472,6 +507,41 @@ shinyServer(function(input, output, session) {
     paste(zzneigh,",", zzboro, sep = " ")
   })
   
+  output$featwater <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    zzfeat <- myfeaturetable[myfeaturetable$ZIP == zz, 'Bordering.Water']
+    zzfeat <- ifelse(zzfeat=="N","No", "Yes")
+    paste("Bordering Water:", zzfeat, sep = " ")
+  })
+  
+  output$featlines <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    zzfeat <- myfeaturetable[myfeaturetable$ZIP == zz, 'Number.of.Subway.Lines.Serving.ZIP']
+    zzfeat <- ifelse(is.na(zzfeat),0, zzfeat)
+    paste("Number of subway lines:", zzfeat, sep = " ")
+  })
+  
+  output$featparks <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    zzfeat <- myfeaturetable[myfeaturetable$ZIP == zz, 'Number.of.Parks']
+    zzfeat <- ifelse(is.na(zzfeat),0, zzfeat)
+    paste("Number of parks:", zzfeat, sep = " ")
+  })
+  
+  output$featplays <- renderText({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    zzfeat <- myfeaturetable[myfeaturetable$ZIP == zz, 'Number.of.Playgrounds']
+    zzfeat <- ifelse(is.na(zzfeat),0, zzfeat)
+    paste("Number of playgrounds:", zzfeat, sep = " ")
+  })
 })  
 
 #shinyApp(ui, server=shinyServer)
