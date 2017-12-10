@@ -1,10 +1,19 @@
+df_viz <- fread(file.path(getwd(), "Visualization", "Income_Home_Prices_ZIP_viz.csv"))
+
+zillow_growth <- df_zillow[,.(ZIP, Year, ZillowAdj2)][Year==2016 | Year==2017][,"Growth_16_17":=1-shift(ZillowAdj2,1)/ZillowAdj2,by=ZIP]
+zillow_growth <- zillow_growth[complete.cases(zillow_growth),][,.(ZIP, Growth_16_17)]
+
+zillow_overall <- df_zillow[complete.cases(df_zillow),c("Year", "ZIP", "ZillowAdj2")][,.SD[unique(c(1,.N))],by=ZIP][,"overall_growth":=(1-shift(ZillowAdj2,1)/ZillowAdj2)/(Year-shift(Year,1)),by=ZIP]
+zillow_overall <- zillow_overall[complete.cases(zillow_overall),][,.(ZIP, overall_growth)]
+
+##R code to pipe into stan
 library(rstan)
 library(RColorBrewer)
 library(data.table)
 
 options(mc.cores = parallel::detectCores())
 
-stan_file <- file.path(getwd(),"Models","stan_files","housing_price4.stan") #where the STAN model is saved
+stan_file <- file.path(getwd(),"Models","stan_files","housing_price5.stan") #where the STAN model is saved
 df <- data.table(read.csv((file.path(getwd(),"Data","Income_Home_Prices_ZIP_v3.csv"))))
 df[,CRIME_COUNTperSqMile:=CRIME_COUNT/LandSqMile]
 df[,log_AGI:=log(AGIadj2015)]
@@ -35,7 +44,7 @@ df_permit <- merge(df_permit, unique(df[,.(ZIP, LandSqMile)]), by=c("ZIP"))
 df_permit[,NB_lag1:=log(shift(as.double(NB),1)+1.001),by=ZIP]
 df_permit[,A1_lag1:=log(shift(as.double(A1),1)+1.001),by=ZIP]
 df_permit[,A2_lag1:=log(shift(as.double(A2),1)+1.001),by=ZIP]
-df_permit[,DM_lag2:=log(shift(as.double(DM/LandSqMile),2)+1.001), by=ZIP]
+df_permit[,DM_lag2:=log(shift(as.double(DM/LandSqMile),2,fill = NA)+1.001), by=ZIP]
 #df_permit[,DM_lag2:=log(shift(as.double(DM),2)+1.001), by=ZIP]
 df_permit <- df_permit[Year==2016 | Year==2017]
 
@@ -100,6 +109,67 @@ id <- as.numeric(as.factor(df_mod$Neighborhood)) ## each group, i.e.  neighborho
 id_pred <- as.numeric(as.factor(df_pred$Neighborhood)) ## each group, i.e. neighborhoods
 zip_levels <- levels(as.factor(df_mod$ZIP)) ##to map back id to zip
 
+##Forecast data
+df_crime <- fread(file.path(getwd(), "Data", "NYC violent crime yearly count.csv"))
+colnames(df_crime)[1:2] <- c("ZIP", "Year")
+df_crime <- df_crime[ZIP %in% unique(df[,ZIP])]
+crime_growth <- df_crime[,.(ZIP, Year, CRIME_COUNT)][Year==2015 | Year==2016][,"Growth_15_16":=1-shift(CRIME_COUNT,1)/CRIME_COUNT,by=ZIP]
+crime_growth <- crime_growth[complete.cases(crime_growth),][,.(ZIP, Growth_15_16)]
+crime_growth <- merge(crime_growth, df_crime[Year==2016], by=c("ZIP"))
+crime_overall <- df_crime[complete.cases(df_crime),c("Year", "ZIP", "CRIME_COUNT")][,.SD[unique(c(1,.N))],by=ZIP][,"overall_growth":=(1-shift(CRIME_COUNT,1)/CRIME_COUNT)/(Year-shift(Year,1)),by=ZIP]
+crime_overall <- crime_overall[complete.cases(crime_overall),][,.(ZIP, overall_growth)]
+crime_growth <- merge(crime_growth, crime_overall, by=c("ZIP"))[,.(ZIP, Year, CRIME_COUNT, Growth_15_16, overall_growth)]
+rm(crime_overall)
+
+crime_forecast <- data.table(ZIP=integer(), Year=integer(),CRIME_COUNT_15_16=integer(),CRIME_COUNT_o=integer(),
+                             Growth_15_16=double(),overall_growth=double())
+crime_growth_hold <- crime_growth[Year==2016]
+crime_forecast <- crime_growth_hold[,list(ZIP,Year,CRIME_COUNT_15_16=round(Growth_15_16*CRIME_COUNT + CRIME_COUNT,0), 
+                                          CRIME_COUNT_o=round(CRIME_COUNT*overall_growth+CRIME_COUNT,0),
+                                          Growth_15_16,overall_growth)]
+for (n in 2017:2024){
+  crime_growth_hold <- crime_forecast[Year==n-1]
+  crime_growth_hold <- crime_growth_hold[,list(ZIP,Year=n,CRIME_COUNT_15_16=round(Growth_15_16*CRIME_COUNT_15_16 + CRIME_COUNT_15_16,0), 
+                                               CRIME_COUNT_o=round(CRIME_COUNT_o*overall_growth+CRIME_COUNT_o,0),
+                                               Growth_15_16,overall_growth)]
+  crime_forecast <- rbind(crime_forecast,crime_growth_hold)
+}
+crime_forecast <- crime_forecast[,Year:=Year+1][Year >= 2018]
+crime_forecast <- merge(crime_forecast, unique(df[,.(ZIP, LandSqMile)], by=c("ZIP")))
+crime_forecast[,`:=`(CRIME_COUNT_15_16=log(as.double(CRIME_COUNT_15_16)/LandSqMile),CRIME_COUNT_o=log(as.double(CRIME_COUNT_o)/LandSqMile))]
+
+##Permits forecast data
+df_permit <- fread(file.path(getwd(), "Data", "nyc_permit_yearly_count.csv"))
+df_permit <- dcast(df_permit, `Zip Code` + `Filing Year` ~ `Job Type`, value.var = c("Count"))
+colnames(df_permit)[1:2] <- c("ZIP", "Year")
+df_permit[Year==2017,`:=`(NB=round(as.double(NB)*(1+1/12),0),A1=round(as.double(A1)*(1+1/12),0),A2=round(as.double(A2)*(1+1/12),0),DM=round(as.double(DM)*(1+1/12),0))]##December data missing
+
+df_permit_agg <- df_permit[Year>=2010][,`:=`(mean_A1=mean(A1), sd_A1=sd(A1), mean_A2=mean(A2), sd_A2=sd(A2), mean_NB=mean(NB), sd_NB=sd(NB), mean_DM=mean(DM), sd_DM=sd(DM)),by=c("ZIP")]
+df_permit_agg <- df_permit_agg[,`:=`(lambd_A1=sum(A1)/8,lambd_A2=sum(A2)/8,lambd_NB=sum(NB)/8,lambd_DM=sum(DM)/8),by=c("ZIP")][Year==2017]
+
+for (n in 2018:2025) {
+  df_permit <- rbind(df_permit,df_permit[,list(ZIP=unique(ZIP), Year=rep(n,175), A1=rpois(175,df_permit_agg$lambd_A1), 
+                                               A2=rpois(175,df_permit_agg$lambd_A2), DM=rpois(175,df_permit_agg$lambd_DM), NB=rpois(175,df_permit_agg$lambd_NB))])
+}
+df_permit <- merge(df_permit, unique(df[,.(ZIP, LandSqMile)]), by=c("ZIP"))
+
+df_permit[,NB_lag1:=log(shift(as.double(NB),1)+1.001),by=ZIP]
+df_permit[,A1_lag1:=log(shift(as.double(A1),1)+1.001),by=ZIP]
+df_permit[,A2_lag1:=log(shift(as.double(A2),1)+1.001),by=ZIP]
+df_permit[,DM_lag2:=log(shift(as.double(DM/LandSqMile),2)+1.001), by=ZIP]
+df_permit <- df_permit[Year>2017][,.(ZIP,Year, NB_lag1,A1_lag1,A2_lag1,DM_lag2)]
+
+df_forecast <- df_mod[Year==2015][,.(ZIP, Borough,Neighborhood, Bordering.Water,Proximity,Num_stat_cat)]
+df_forecast <- df_forecast[rep(seq_len(nrow(df_forecast)), 8),]
+df_forecast[,Year:=rep(2018:2025,each=175)]
+df_forecast <- merge(merge(df_forecast, df_permit, by=c("ZIP", "Year")), crime_forecast[,.(ZIP, Year,CRIME_COUNT_o)], by=c("ZIP", "Year"))
+
+N_forecast <- nrow(df_forecast)
+X_forecast <- as.matrix(df_forecast[,.(NB_lag1, A1_lag1, A2_lag1, DM_lag2, Proximity)])
+X_forecast_crime <- df_forecast$CRIME_COUNT_o
+boro_forecast <- as.numeric(as.factor(df_forecast$Borough))
+id_forecast <- as.numeric(as.factor(df_forecast$Neighborhood))
+
 #run the model
 stan_data <- list(N=N,N_pred=N_pred,J=J,K=K,id=id,id_pred=id_pred,
                   boro=boro,boro_pred=boro_pred,B=B,
@@ -107,15 +177,26 @@ stan_data <- list(N=N,N_pred=N_pred,J=J,K=K,id=id,id_pred=id_pred,
                   station=station, S=S, station_pred=station_pred,
                   X_pred_crime=X_pred_crime, predictor_crime=predictor_crime,
                   prev_zillow=predictor_prev_zillow, X_prev_zillow=X_pred_prev_zillow,
+                  N_forecast=N_forecast,X_forecast=X_forecast,boro_forecast=boro_forecast,
+                  id_forecast=id_forecast,X_forecast_crime=X_forecast_crime,
                   X=predictors,X_pred=X_pred,y=response)
 if (exists("m_hier")){ rm(m_hier) }
 m_hier<-stan(file=stan_file, data = stan_data, chains=4)
 
 fit_summary <- summary(m_hier)$summary
-pred_out <- data.frame(fit_summary[grep("y_sim", rownames(fit_summary)),]) ##stan model prediction for 2016
-pred_out$ZIP <- rep(zip_levels,each=2)
-pred_out$Year <- rep(2016:2017,175)
-
+pred_out <- data.table(fit_summary[grep("y_sim", rownames(fit_summary)),], keep.rownames = TRUE) ##stan model prediction
+pred_out[,`:=`(ZIP=rep(zip_levels,each=5), Year=rep(2016:2025,175))]
+colnames(pred_out)[2] <- "y_sim"
+alpha_out <- data.table(fit_summary[grep("alpha_pred", rownames(fit_summary)),],  keep.rownames = TRUE)
+alpha_out[,`:=`(ZIP=rep(zip_levels,each=5), Year=rep(2016:2025,175))]
+colnames(alpha_out)[2] <- "alpha_pred"
+beta_out <- data.table(fit_summary[grep("beta_pred", rownames(fit_summary)),], keep.rownames = TRUE)
+beta_out[,`:=`(ZIP=rep(zip_levels,each=5), Year=rep(2016:2025,175))]
+colnames(beta_out)[2] <- "beta_pred"
+pred_out <- merge(pred_out[,.(ZIP, Year, y_sim)], alpha_out[,.(ZIP, Year, alpha_pred)], by=c("ZIP", "Year"))
+pred_out <- merge(pred_out[,.(ZIP, Year, y_sim, alpha_pred)], beta_out[,.(ZIP, Year, beta_pred)], by=c("ZIP", "Year"))
+pred_forecast <- pred_out[Year > 2017]
+write.csv(pred_forecast, 'zillow_forecast.csv', row.names=FALSE)
 ##shinystan::launch_shinystan(m_hier) ##For parameter diagnostics
 
 ## Base line model to predict 2016
