@@ -19,7 +19,7 @@ gdata <- read.csv("Income_Home_Prices_ZIP_viz.csv")
 # Additional Features for Zip Code description
 myfeaturetable <- gdata[gdata$Year == 2015, c("ZIP", "Bordering.Water","Number.of.Subway.Lines.Serving.ZIP", 
                                               "Number.of.Parks", "Number.of.Playgrounds")]
-myprobtable <- gdata[gdata$Year >= 2005, c("ZIP", "Year", "alpha", "beta", "HouseHigh")]
+myprobtable <- gdata[gdata$Year >= 2005, c("ZIP", "Year", "alpha", "beta", "HouseHigh", "threshold", "NotGentReason")]
 
  
 # Longitude and Latitude vectors
@@ -30,15 +30,16 @@ gdata$lat <- as.numeric(gdata$Latitude)
 gdata_prob <- gdata[rev(order(gdata$Probability)),]
 
 # Smaller data frame to only keep columns for table in UI
-mydatatable <- gdata_prob[, c("ZIP", "Borough", "Year", "Probability", "AGI", "Price_Index")]
+mydatatable <- gdata_prob[, c("ZIP", "Borough", "Neighborhood", "Year", "Probability", "AGI", "Price_Index")]
+mydatatable$Price_Index <- round(mydatatable$Price_Index,4)
 
 
 # For line charts
 gdataplot <- gdata[gdata$Year >= 2005, c("ZIP", "Year", "AGI_num", "Price_Index",
-                                         "IncomeLow", "IncomeHigh", "HouseLow", "HouseHigh")]
+                                         "IncomeLow", "IncomeHigh", "HouseLow", "HouseHigh", "topincreasepercent")]
 
 # For Spatial Data
-data.SP <- SpatialPointsDataFrame(gdata[,c(23, 24)], gdata[,-c(23,24)])
+#data.SP <- SpatialPointsDataFrame(gdata[,c(23, 24)], gdata[,-c(23,24)])
 
 
 # Zip code boundaries polygons - GEOJSON file
@@ -215,8 +216,9 @@ shinyServer(function(input, output, session) {
     })
 
   # Table of zip codes and gentri proba
-  output$mytable <- renderDataTable(filtered_data()[, c("ZIP", "Borough", 
-                                                        "Probability", "AGI", "Price_Index")], 
+  output$mytable <- renderDataTable(filtered_data()[, c("ZIP", "Borough", "Neighborhood",
+                                                        "Probability", "Price_Index")], # income dropped since no projected data after 2015
+                                    colnames = c('Zip Code', 'Borough', 'Neighborhood', 'Gentrification Probability (%)', 'House Index'),
                                     selection = 'single')  # Single row selection and drop "Year" column
   
   # Dynamic UI not needed for now since selection of row from table above directly used as input
@@ -238,9 +240,57 @@ shinyServer(function(input, output, session) {
   #  data
   #})
   
+  # Eligible for Gentrification Flag for different output in UI
+  gentflag <- reactive({     
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    zip_data <- myprobtable[myprobtable$ZIP == zz,]
+    zip_data <- zip_data[zip_data$Year == input$pickyear,]
+    zip_data['NotGentReason'] <- as.character(zip_data$NotGentReason)
+    gent <- zip_data$NotGentReason
+    ifelse(gent == "N/A",1,0)
+  }) 
+  
+  # If not eligible for gentrification
+  output$text1 <- renderText({
+    if(gentflag()== 0){
+      zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+      if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+      
+      zip_data <- myprobtable[myprobtable$ZIP == zz,]
+      zip_data <- zip_data[zip_data$Year == input$pickyear,]
+      zip_data['NotGentReason'] <- as.character(zip_data$NotGentReason)
+      gent <- zip_data$NotGentReason
+      
+      if(gent=="Past"){
+        paste("Gentrification prediction only applicable for years after 2015")
+      } else if(gent=="High Income and/or Housing"){
+        paste("Not eligible for gentrification: Above NYC average house value and/or income")
+      } else if(gent=="Low Increase Rate"){
+        paste("Not eligible for gentrification: House Value did not increase enough")
+      }
+    }
+    })
+  
+  output$text_gent <- renderText({
+    if(gentflag()== 0){
+      zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+      if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+      
+      zip_data <- myprobtable[myprobtable$ZIP == zz,]
+      zip_data <- zip_data[zip_data$Year == input$pickyear,]
+      zip_data['NotGentReason'] <- as.character(zip_data$NotGentReason)
+      gent <- zip_data$NotGentReason
+      
+      if(gent=="Past"){
+        paste("Gentrification prediction only applicable for years after 2015. All probabilities set to 0.")
+      }
+    }})
   
   # Plot for House Probability
   output$probplot <- renderPlot({
+    if(gentflag()== 1){
     zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
     if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
     zip_data <- myprobtable[myprobtable$ZIP == zz,]
@@ -248,22 +298,77 @@ shinyServer(function(input, output, session) {
     
     alpha <- zip_data$alpha	
     beta <- zip_data$beta
-    threshold_highvalue <- zip_data$HouseHigh
+    #threshold_highvalue <- zip_data$HouseHigh  #if criteria is top third percentile of house value
+    threshold_highvalue <- zip_data$threshold  # if criteria is top third percentile of house value INCREASE
     
-    prob <- round((1 - pgamma(threshold_highvalue, shape=alpha, scale=1/beta))*100,0)
-    title1 <- paste("Probability greater than NYC top 1/3 indices:", prob, "%", sep=" ")
+    dfgamma <- data.frame(x=c(1:10000),HouseIndex = rgamma(100000, shape=alpha, scale=1/beta))
+    dens <- density(dfgamma$HouseIndex)
+    df <- data.frame(x=dens$x, y=dens$y)
+    probs <- c(0, pgamma(threshold_highvalue, shape=alpha, scale=1/beta))
+    quantiles <- quantile(dfgamma$HouseIndex, prob=probs)
+    quantiles_labels <- 1 - quantiles
+    df$quant <- factor(findInterval(df$x,quantiles))
     
-    dfgamma <- data.frame(HouseIndex = rgamma(100000, shape=alpha, scale=1/beta))
-    #fillcolor <- ifelse(dfgamma$HouseIndex<threshold_highvalue, "white", "blue")
-    
-    ggplot(dfgamma, aes(HouseIndex)) + 
-      geom_density(alpha = 0.2, color='grey', fill="blue") + 
-      geom_vline(xintercept=threshold_highvalue, color='purple', linetype = "longdash") +
-      ggtitle(title1) +
+    ggplot(df, aes(x,y)) + geom_line() + 
+      geom_ribbon(aes(ymin=0, ymax=y, fill=quant)) + 
+      #scale_x_continuous(breaks=quantiles) + 
+      #scale_x_continuous(breaks=quantiles, labels=c("", paste("Minimum House Value Required*:",round(threshold_highvalue,4), sep=" " ))) + 
+      scale_x_continuous(breaks=quantiles, labels=c("", "")) + 
+      scale_fill_brewer(guide="none") +
+      geom_vline(xintercept=threshold_highvalue, color='blue', linetype = "longdash") +
+      ggtitle(paste("Probability of House Value in Zip Code", zz, "in", input$pickyear, sep =" ")) +
+      xlab("House Value Index") +
+      ylab("Probability") +
       theme_minimal() +
-      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+      theme(#axis.title.x=element_blank(), 
+            axis.title.y=element_blank(), axis.text.y=element_blank(),
+            panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+    
+    ### old codes
+    #prob <- round((1 - pgamma(threshold_highvalue, shape=alpha, scale=1/beta))*100,0)
+    #title1 <- paste("Probability greater than NYC top 1/3 indices:", prob, "%", sep=" ")
+    
+    #dfgamma <- data.frame(HouseIndex = rgamma(100000, shape=alpha, scale=1/beta))
+    
+    #ggplot(dfgamma, aes(HouseIndex)) + 
+    #  geom_density(alpha = 0.2, color='grey', fill="blue") + 
+    #  geom_vline(xintercept=threshold_highvalue, color='purple', linetype = "longdash") +
+    #  ggtitle(title1) +
+    #  theme_minimal() +
+    #  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+    }
   })
   
+  output$gentprob <- renderText({
+    if(gentflag()== 1){
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    
+    zip_data <- myprobtable[myprobtable$ZIP == zz,]
+    zip_data <- zip_data[zip_data$Year == input$pickyear,]
+    
+    alpha <- zip_data$alpha	
+    beta <- zip_data$beta
+    #threshold_highvalue <- zip_data$HouseHigh  #if criteria is top third percentile of house value
+    threshold_highvalue <- zip_data$threshold  # if criteria is top third percentile of house value INCREASE
+    
+    prob <- 1.0 - pgamma(threshold_highvalue,shape=alpha, scale=1/beta)
+    prob <- round(prob*100,0)
+    paste(prob, "%", sep = " ")
+    }
+  })
+  
+  output$gentprob_text <- renderText({
+    if(gentflag()== 1){
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    t0 <- input$pickyear-10
+    t1 <- input$pickyear
+    paste("Probability that zip code", zz, "will gentrify over", t0, "to", t1, sep = " ")
+    }
+  })
+  
+
   
   # Plot for Income
   output$incomeplot <- renderPlot({
@@ -304,6 +409,41 @@ shinyServer(function(input, output, session) {
       ggtitle(paste("Mean House Index from 2005 to", input$pickyear, sep=" ")) +
       theme_minimal()
   })
+  
+  # Plot for House Index Increase
+  output$houseincreaseplot <- renderPlot({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){zz<- filtered_data()$ZIP[1]}
+    zip_data <- gdataplot[gdataplot$ZIP == zz, 
+                          c("Year", "Price_Index")]
+    d <- zip_data[(zip_data$Year <= input$pickyear) & (zip_data$Year >= (input$pickyear - 10)),]
+    d_list <- as.vector(d[(d$Year <= input$pickyear) & (d$Year >= (input$pickyear -10)),"Price_Index"])
+    
+    initprice <- d_list[1]
+    initprice
+    
+    increase=c()
+    increase[1] = 0
+    
+    for (i in 2:length(d_list)) { 
+      tmp <- ((d_list[i]/initprice) - 1) * 100
+      increase[i] = tmp 
+    }
+    
+    l <- length(increase) - 1
+    years <- seq(input$pickyear -l, input$pickyear, 1)
+    df <- data.frame("Year" = years, "Increase" = increase)
+    threshold_percent = gdataplot[(gdataplot$ZIP == zz) & (gdataplot$Year == input$pickyear), 
+                                  "topincreasepercent"]
+    
+    ggplot(df, aes(x=Year, y=Increase)) +
+      geom_line(colour = "blue", linetype = "solid", size = 2) +
+      geom_hline(yintercept=threshold_percent*100, color='yellowgreen', linetype = "longdash", size=1) +
+      xlab("Year") + ylab("Accumulated House Value Increase (%)") +
+      ggtitle(paste("Accumulated Increase in House Value from", input$pickyear -10, sep=" ")) +
+      theme_minimal()
+  })
+  
   
   # Headers for multiple tabs
   output$selectzip <- renderText({
@@ -416,13 +556,14 @@ shinyServer(function(input, output, session) {
       addPolygons(stroke = TRUE, smoothFactor = 0.3, fillOpacity = 0.5, weight=3, 
                   color = "black", fillColor = "white") %>%
       addHeatmap(data=permits_plot, lat = ~LATITUDE, lng = ~LONGITUDE, intensity = ~num_permitsTRIM, #problem with this line!
-                 radius = 7) %>%
-      addLegend("bottomright", pal=pal,
-                values = ~c(1,2,3,4,5,6,7,8,9,10),
+                 radius = 7) 
+      #%>%
+      #addLegend("bottomright", pal=pal,
+      #          values = ~c(1,2,3,4,5,6,7,8,9,10),
                 #values = ~num_permitsTRIM,
-                labFormat = myLabelFormat(reverse_order = T),
-                title = "Count",
-                opacity = 0.75)
+      #          labFormat = myLabelFormat(reverse_order = T),
+      #          title = "Count",
+      #          opacity = 0.75)
     
   })
   
@@ -442,13 +583,14 @@ shinyServer(function(input, output, session) {
       addPolygons(stroke = TRUE, smoothFactor = 0.3, fillOpacity = 0.5, weight=3, 
                   color = "black", fillColor = "white") %>%
       addHeatmap(data=permits_plot, lat = ~LATITUDE, lng = ~LONGITUDE, intensity = ~num_permitsTRIM, #problem with this line!
-                 radius = 7) %>%
-      addLegend("bottomright", pal=pal,
-                values = ~c(1,2,3,4,5,6,7,8,9,10),
+                 radius = 7) 
+      #%>%
+      #addLegend("bottomright", pal=pal,
+      #          values = ~c(1,2,3,4,5,6,7,8,9,10),
                 #values = ~num_permitsTRIM,
-                labFormat = myLabelFormat(reverse_order = T),  # problem: stops at 7 with red since max =7 in 2016
-                title = "Count",
-                opacity = 0.75)
+      #          labFormat = myLabelFormat(reverse_order = T),  # problem: stops at 7 with red since max =7 in 2016
+      #          title = "Count",
+      #          opacity = 0.75)
     
   })
   

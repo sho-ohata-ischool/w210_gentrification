@@ -28,7 +28,7 @@ ui <- fluidPage(
     # Sidebar panel for inputs ----
     sidebarPanel(id="sidebar",width = 6,
       sliderInput("pickyear", "Select Gentrification Year:", min = 2005, max = 2025, 
-                  value = 2015, sep = "", width = "50%"),
+                  value = 2017, sep = "", width = "50%"),
       br(), 
       br(),
       leafletOutput("mymap", height=500)
@@ -63,8 +63,14 @@ ui <- fluidPage(
                                                 }"
                                                 )
                            ),
+                           textOutput("text_gent"),
+                           tags$head(tags$style("#text_gent{color: red;
+                                                font-size: 15px;
+                                                font-weight: bold;
+                                                }")),
                            br(),
-                           dataTableOutput("mytable")),
+                           dataTableOutput("mytable")
+                           ),
                   
                   tabPanel("GentriStats", 
                            br(),
@@ -91,10 +97,42 @@ ui <- fluidPage(
                                                 #                  "))
                                                 #  ),
                                                 br(),
+                                                
                                                 fluidRow(
-                                                  column(6, plotOutput("houseplot")),
-                                                  column(6, plotOutput("probplot"))
-                                                  )
+                                                  column(6,plotOutput("houseplot", height=250)),
+                                                  column(6,plotOutput("houseincreaseplot", height=250))
+                                                  ),
+                                                fluidRow(
+                                                  column(8, 
+                                                         textOutput("text1"),
+                                                         tags$head(tags$style("#text1{color: #396a93;
+                                                                              font-size: 20px;
+                                                                              font-weight: bold;
+                                                                              }")),
+                                                         plotOutput("probplot", height=250)),
+                                                  #column(1,br(),br(),br(),br(),tags$img(src = "arrow.png", height=50, width = 20)),
+                                                  column(4, 
+                                                         br(), br(),
+                                                         textOutput("gentprob"),
+                                                         tags$head(tags$style("#gentprob{color: #396a93;
+                                                                              font-size: 30px;
+                                                                              font-weight: bold;
+                                                                              }")),
+                                                         textOutput("gentprob_text"),
+                                                         tags$head(tags$style("#gentprob_text{color: #396a93;
+                                                                              font-size: 15px;
+                                                                              font-weight: normal;
+                                                                                text-align:left;
+                                                                              }"))
+                                                         
+                                                         #tags$h5("Probability that zip code will gentrify over 2005 to 2015"),
+                                                         #tags$head(
+                                                          # tags$style(HTML("h5 {
+                                                          #                   text-align:left;
+                                                          #                   font-size: 15px;
+                                                          #                   font-style: normal;
+                                                          #                   color: #396a93;} ")))
+                                                         ))
                                                 ),
                                        
                                        tabPanel("Crimes",
@@ -172,7 +210,7 @@ ui <- fluidPage(
                            )
                            ),
 
-                  tabPanel("Gentrifacts", 
+                  tabPanel("GentriFacts", 
                            textOutput("selectzip2"),
                            tags$head(tags$style("#selectzip2{color: #396a93;
                                                         font-size: 20px;
