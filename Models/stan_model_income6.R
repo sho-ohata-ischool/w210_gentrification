@@ -13,7 +13,7 @@ library(data.table)
 
 options(mc.cores = parallel::detectCores())
 
-stan_file <- file.path(getwd(),"Models","stan_files","housing_price5.stan") #where the STAN model is saved
+stan_file <- file.path(getwd(),"Models","stan_files","housing_price6.stan") #where the STAN model is saved
 df <- data.table(read.csv((file.path(getwd(),"Data","Income_Home_Prices_ZIP_v3.csv"))))
 df[,CRIME_COUNTperSqMile:=CRIME_COUNT/LandSqMile]
 df[,log_AGI:=log(AGIadj2015)]
@@ -33,7 +33,7 @@ df_zillow[,Zillow_change:=ZillowAdj2 - ZillowAdj2_lag]
 ## Crime data for prediction of corresponding year
 df_crime <- fread(file.path(getwd(), "Data", "NYC violent crime yearly count.csv"))
 df_crime <- merge(df_crime,unique(df[,.(ZIP, LandSqMile)]),by.x="Zip_Code", by.y="ZIP")
-df_crime <- df_crime[,log_crime:=log(CRIME_COUNT/LandSqMile)][YEAR==2016 | YEAR==2015] ##for prediction
+df_crime <- df_crime[,log_prev_crime:=log(CRIME_COUNT/LandSqMile)][YEAR==2016 | YEAR==2015] ##for prediction
 df_crime[,YEAR:=YEAR+1]
 colnames(df_crime)[1:2] <- c("ZIP", "Year")
 
@@ -66,10 +66,6 @@ df_mod[,intercept:=rep(1,nrow(df_mod))]
 df_mod <- df_mod[order(Year,ZIP)]
 #predictors <- as.matrix(df_mod[,.(intercept,prev_zillow, log_prev_crime, NB_lag1,A1_lag1,A2_lag1, DM_lag2, Proximity)])
 #predictors <- as.matrix(df_mod[,.(prev_zillow, log_prev_crime, NB_lag1,A1_lag1,A2_lag1, DM_lag2, Proximity)])
-predictors <- as.matrix(df_mod[,.(NB_lag1,A1_lag1,A2_lag1, DM_lag2, Proximity)])
-predictor_prev_zillow <- df_mod$prev_zillow
-predictor_crime <- df_mod$log_prev_crime
-response <- df_mod$ZillowAdj2
 
 ## Create data for prediction
 ##df_pred <- df[,.(ZIP, Year, ZillowAdj2, log_crime, A1_lag1=log(as.double(A1)+1.001), NB_lag1=log(as.double(NB)+1.001), DM_lag2=shift(log(as.double(DM+1.001)), 1))]
@@ -81,34 +77,46 @@ response <- df_mod$ZillowAdj2
 ##df_pred <- merge(rbind(df_pred, merged), unique(df_mod[,.(ZIP, Borough, Num_stat_cat)]), by=c("ZIP"))
 ##df_pred$A2_log <- df_permit[,(A2_log)]
 
-df_pred <- merge(merge(df_zillow[,.(ZIP, Year, ZillowAdj2_lag)][Year==2016 | Year==2017], df_crime, by=c("ZIP", "Year")), 
+df_pred <- merge(merge(df_zillow[,.(ZIP, Year, ZillowAdj2,ZillowAdj2_lag)][Year==2016 | Year==2017], df_crime, by=c("ZIP", "Year")), 
                  df_permit[,.(ZIP, Year, NB_lag1, A1_lag1, A2_lag1, DM_lag2)],by=c("ZIP", "Year"))
-df_pred[,intercept:=rep(1,nrow(df_pred))]
-df_pred <- merge(df_pred, unique(df[,.(ZIP, Neighborhood, Borough, Num_stat_cat)]), by=c("ZIP"))
+#df_pred[,intercept:=rep(1,nrow(df_pred))]
+df_pred <- merge(df_pred, unique(df[,.(ZIP, Neighborhood,Bordering.Water, Borough, Num_stat_cat)]), by=c("ZIP"))
 prox <- df[df$Year==2015][,.(ZIP, Proximity)]
 df_pred <- merge(df_pred, prox, by=c("ZIP"))
 df_pred <- df_pred[order(Year,ZIP)]
+df_pred <- df_pred[,.(ZIP,Year,ZillowAdj2,Borough,ZillowAdj2_lag,Bordering.Water,Neighborhood,Proximity,Num_stat_cat,NB_lag1,A1_lag1,A2_lag1,DM_lag2,log_prev_crime)]
+colnames(df_pred)[5] <- "prev_zillow"
+df_mod <- df_mod[,.(ZIP,Year,ZillowAdj2,prev_zillow,Borough,Bordering.Water,Neighborhood,Proximity,Num_stat_cat,NB_lag1,A1_lag1,A2_lag1,DM_lag2,log_prev_crime)]
+df_mod <- rbind(df_pred,df_mod)
+df_mod <- df_mod[order(Year,ZIP)]
+
 #X_pred <- as.matrix(df_pred[,.(ZillowAdj2_lag, log_crime, NB_lag1, A1_lag1, A2_lag1, DM_lag2, Proximity)])
 #X_pred <- as.matrix(df_pred[,.(ZillowAdj2_lag, NB_lag1, A1_lag1, A2_lag1, DM_lag2, Proximity)])
-X_pred <- as.matrix(df_pred[,.(NB_lag1, A1_lag1, A2_lag1, DM_lag2, Proximity)])
-X_pred_crime <- df_pred$log_crime
-X_pred_prev_zillow <- df_pred$ZillowAdj2_lag
+predictors <- as.matrix(df_mod[,.(NB_lag1,A1_lag1,A2_lag1, DM_lag2, Proximity)])
+predictor_prev_zillow <- df_mod$prev_zillow
+zillow_2017 <- df_mod[Year==2017]$ZillowAdj2
+predictor_crime <- df_mod$log_prev_crime
+response <- df_mod$ZillowAdj2
+
+#X_pred <- as.matrix(df_pred[,.(NB_lag1, A1_lag1, A2_lag1, DM_lag2, Proximity)])
+#X_pred_crime <- df_pred$log_crime
+#X_pred_prev_zillow <- df_pred$ZillowAdj2_lag
 #X_pred <- as.matrix(df_pred[,.(intercept, ZillowAdj2_lag, log_crime, NB_lag1, A1_lag1, A2_lag1, DM_lag2, Proximity)])
 
 ##Parameters to be passed to stan
 N <- nrow(df_mod) #number of observations
-N_pred <- nrow(df_pred)
+#N_pred <- nrow(df_pred)
 J <- length(unique(df_mod$Neighborhood)) #number of neighborhoods
 K <- ncol(predictors) #number of regression coefficients
 B <- length(unique(df_mod$Borough))
 S <- length(unique(df_mod$Num_stat_cat))
 boro <- as.numeric(as.factor(df_mod$Borough))
-boro_pred <- as.numeric(as.factor(df_pred$Borough))
+#boro_pred <- as.numeric(as.factor(df_pred$Borough))
 water <- as.numeric(as.factor(df_mod$Bordering.Water))
 station <- as.numeric(as.factor(df_mod$Num_stat_cat))
-station_pred <- as.numeric(as.factor(df_pred$Num_stat_cat))
+#station_pred <- as.numeric(as.factor(df_pred$Num_stat_cat))
 id <- as.numeric(as.factor(df_mod$Neighborhood)) ## each group, i.e.  neighborhoods
-id_pred <- as.numeric(as.factor(df_pred$Neighborhood)) ## each group, i.e. neighborhoods
+#id_pred <- as.numeric(as.factor(df_pred$Neighborhood)) ## each group, i.e. neighborhoods
 zip_levels <- levels(as.factor(df_mod$ZIP)) ##to map back id to zip
 
 ##Forecast data
@@ -174,27 +182,25 @@ boro_forecast <- as.numeric(as.factor(df_forecast$Borough))
 id_forecast <- as.numeric(as.factor(df_forecast$Neighborhood))
 
 #run the model
-stan_data <- list(N=N,N_pred=N_pred,J=J,K=K,id=id,id_pred=id_pred,
-                  boro=boro,boro_pred=boro_pred,B=B,
-                  ##water=water,
-                  station=station, S=S, station_pred=station_pred,
-                  X_pred_crime=X_pred_crime, predictor_crime=predictor_crime,
-                  prev_zillow=predictor_prev_zillow, X_prev_zillow=X_pred_prev_zillow,
+stan_data <- list(N=N,J=J,K=K,id=id,boro=boro,B=B,
+                  station=station, S=S, 
+                  predictor_crime=predictor_crime,
+                  prev_zillow=predictor_prev_zillow, zillow_2017=zillow_2017,
                   N_forecast=N_forecast,X_forecast=X_forecast,boro_forecast=boro_forecast,
                   id_forecast=id_forecast,X_forecast_crime=X_forecast_crime,
-                  X=predictors,X_pred=X_pred,y=response)
+                  X=predictors,y=response)
 if (exists("m_hier")){ rm(m_hier) }
 m_hier<-stan(file=stan_file, data = stan_data, chains=4)
 
 fit_summary <- summary(m_hier)$summary
 pred_out <- data.table(fit_summary[grep("y_sim", rownames(fit_summary)),], keep.rownames = TRUE) ##stan model prediction
-pred_out[,`:=`(ZIP=rep(zip_levels,5), Year=rep(2016:2025,each=175))]
+pred_out[,`:=`(ZIP=rep(zip_levels,8), Year=rep(2018:2025,each=175))]
 colnames(pred_out)[2] <- "y_sim"
 alpha_out <- data.table(fit_summary[grep("alpha_pred", rownames(fit_summary)),],  keep.rownames = TRUE)
-alpha_out[,`:=`(ZIP=rep(zip_levels,5), Year=rep(2016:2025,each=175))]
+alpha_out[,`:=`(ZIP=rep(zip_levels,8), Year=rep(2018:2025,each=175))]
 colnames(alpha_out)[2] <- "alpha_pred"
 beta_out <- data.table(fit_summary[grep("beta_pred", rownames(fit_summary)),], keep.rownames = TRUE)
-beta_out[,`:=`(ZIP=rep(zip_levels,5), Year=rep(2016:2025,each=175))]
+beta_out[,`:=`(ZIP=rep(zip_levels,8), Year=rep(2018:2025,each=175))]
 colnames(beta_out)[2] <- "beta_pred"
 pred_out <- merge(pred_out[,.(ZIP, Year, y_sim)], alpha_out[,.(ZIP, Year, alpha_pred)], by=c("ZIP", "Year"))
 pred_out <- merge(pred_out[,.(ZIP, Year, y_sim, alpha_pred)], beta_out[,.(ZIP, Year, beta_pred)], by=c("ZIP", "Year"))

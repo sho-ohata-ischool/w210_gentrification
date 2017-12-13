@@ -1,14 +1,11 @@
 data {
   int N; //the number of observations
-  int N_pred; //number of observations for new prediction
   int N_forecast; 
   int J; //the number of neighborhoods
   int K; //number of columns in the model matrix
   int id[N]; //vector of neighborhoods indices
-  int id_pred[N_pred]; //vector of neighborhoods prediction indices
   int id_forecast[N_forecast];
   int boro[N]; //vector of borough
-  int boro_pred[N_pred];
   int boro_forecast[N_forecast];
   int B; //number of boroughs
   //int S; //number of categories for amount of subway stations
@@ -19,9 +16,7 @@ data {
   vector[N] y; //the response variable e.g. zillow price
   vector[N] predictor_crime; 
   vector[N] prev_zillow;
-  matrix[N_pred,K] X_pred; //data being fed in for prediction
-  vector[N_pred] X_pred_crime;
-  vector[N_pred] X_prev_zillow;
+  vector[175] zillow_2017;//2017 zillow actual for 2018
   matrix[N_forecast,K] X_forecast;
   vector[N_forecast] X_forecast_crime;
   //vector[N_forecast] X_forecast_zillow;
@@ -65,21 +60,21 @@ model {
   y ~ gamma(alpha,beta);
 }
 generated quantities {
-  vector[N_pred + N_forecast] y_sim;
-  vector[N_pred + N_forecast] mu_pred;
-  vector[N_pred + N_forecast] alpha_pred;
-  vector[N_pred + N_forecast] beta_pred;
+  vector[N_forecast] y_sim;
+  vector[N_forecast] mu_pred;
+  vector[N_forecast] alpha_pred;
+  vector[N_forecast] beta_pred;
   
-  for(n in 1:N_pred){
-      mu_pred[n] = X_prev_zillow[n] + exp(X_pred[n] * betas[boro_pred[n]] + gamma[boro_pred[n]] + X_pred_crime[n] * tau[id_pred[n]]);
-      //mu_pred[n] = exp(X_prev_zillow[n] + X_pred[n] * betas[boro_pred[n]] + gamma[boro_pred[n]] + X_pred_crime[n] * tau[id_pred[n]]);
-      alpha_pred[n] = mu_pred[n] * mu_pred[n] / phi;
-      beta_pred[n] = mu_pred[n] / phi;
-      y_sim[n] = gamma_rng(alpha_pred[n],beta_pred[n]); //posterior draws to get posterior predictive checks
+  for(n in 1:175){//2018 data
+    mu_pred[n] = zillow_2017[n] + exp(X_forecast[n] * betas[boro_forecast[n]] + gamma[boro_forecast[n]] + X_forecast_crime[n] * tau[id_forecast[n]]);
+    //mu_pred[n] = exp(mu_pred[n-175] + X_forecast[n-N_pred] * betas[boro_forecast[n-N_pred]] + gamma[boro_forecast[n-N_pred]] + X_forecast_crime[n-N_pred] * tau[id_forecast[n-N_pred]]);
+    alpha_pred[n] = mu_pred[n] * mu_pred[n] / phi;
+    beta_pred[n] = mu_pred[n] / phi;
+    y_sim[n] = gamma_rng(alpha_pred[n],beta_pred[n]); //posterior draws to get posterior predictive checks
   }
   
-  for(n in (N_pred+1):(N_pred+N_forecast)){
-    mu_pred[n] = mu_pred[n-175] + exp(X_forecast[n-N_pred] * betas[boro_forecast[n-N_pred]] + gamma[boro_forecast[n-N_pred]] + X_forecast_crime[n-N_pred] * tau[id_forecast[n-N_pred]]);
+  for(n in 176:N_forecast){
+    mu_pred[n] = mu_pred[n-175] + exp(X_forecast[n] * betas[boro_forecast[n]] + gamma[boro_forecast[n]] + X_forecast_crime[n] * tau[id_forecast[n]]);
     //mu_pred[n] = exp(mu_pred[n-175] + X_forecast[n-N_pred] * betas[boro_forecast[n-N_pred]] + gamma[boro_forecast[n-N_pred]] + X_forecast_crime[n-N_pred] * tau[id_forecast[n-N_pred]]);
     alpha_pred[n] = mu_pred[n] * mu_pred[n] / phi;
     beta_pred[n] = mu_pred[n] / phi;
