@@ -25,6 +25,7 @@ myprobtable <- gdata[gdata$Year >= 2005, c("ZIP", "Year", "alpha", "beta", "Hous
 # Longitude and Latitude vectors
 gdata$long <- as.numeric(gdata$Longitude)
 gdata$lat <- as.numeric(gdata$Latitude)
+gdatacoord <- gdata[gdata$Year == 2015, c("ZIP", "Longitude", "Latitude")]
 
 # Data frame sorted by gentrification probability (largest to lowest)
 gdata_prob <- gdata[rev(order(gdata$Probability)),]
@@ -196,11 +197,47 @@ shinyServer(function(input, output, session) {
   output$yearvalue <- renderText(as.numeric(input$pickyear))
   output$yearvaluetext <- renderText(paste("New York City - Year",input$pickyear, sep = " "))
   
+  # Table of zip codes and gentri proba
+  output$mytable <- renderDataTable(filtered_data()[, c("ZIP", "Borough", "Neighborhood",
+                                                        "Probability", "Price_Index")], # income dropped since no projected data after 2015
+                                    colnames = c('Zip Code', 'Borough', 'Neighborhood', 'Gentrification Probability (%)', 'House Index'),
+                                    selection = 'single')  # Single row selection and drop "Year" column
+  
+  
+  zoomlng <- reactive({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){
+      zlong <- -73.935
+    } else {
+      zlong <- gdatacoord[gdatacoord == zz, 'Longitude']
+    }
+  })
+  
+  zoomlat <- reactive({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){
+      zlong <- 40.690
+    } else {
+      zlong <- gdatacoord[gdatacoord == zz, 'Latitude']
+    }
+  })
+  
+  zoomscale <- reactive({
+    zz <- filtered_data()[input$mytable_rows_selected, "ZIP"]
+    if(length(zz)==0){
+      zscale <- 10
+    } else {
+      zscale <- 14
+    }
+  })
+  
+  
   # NYC zip code boundaries map
   output$mymap <- renderLeaflet({
       leaflet(nyzipcode) %>% 
       addProviderTiles("Esri.WorldTopoMap") %>%
-      setView(lng=-73.935, lat=40.690, zoom=10) %>%
+      ##setView(lng=-73.935, lat=40.690, zoom=10) %>%
+      setView(lng=zoomlng(), lat=zoomlat(), zoom=zoomscale()) %>%
       addPolygons(stroke = TRUE, smoothFactor = 0.3, fillOpacity = 0.5, weight=1,
                   fillColor=zipcolor(), color="white") %>%
       addAwesomeMarkers(data = gdata[gdata$Year == input$pickyear,], clusterOptions = markerClusterOptions(), lng = ~Longitude, lat = ~Latitude, icon = icons(),
@@ -215,11 +252,7 @@ shinyServer(function(input, output, session) {
       
     })
 
-  # Table of zip codes and gentri proba
-  output$mytable <- renderDataTable(filtered_data()[, c("ZIP", "Borough", "Neighborhood",
-                                                        "Probability", "Price_Index")], # income dropped since no projected data after 2015
-                                    colnames = c('Zip Code', 'Borough', 'Neighborhood', 'Gentrification Probability (%)', 'House Index'),
-                                    selection = 'single')  # Single row selection and drop "Year" column
+
   
   # Dynamic UI not needed for now since selection of row from table above directly used as input
   # Dynamic UI - based on input year, new input selections of top 5 zip codes through radio buttons

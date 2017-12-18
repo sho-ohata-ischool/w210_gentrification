@@ -19,7 +19,8 @@ ui <- fluidPage(
   )),
   
   # App title ----
-  titlePanel(tags$img(src = "PRIMARY_logo_transparent_background.png",  height = 50, width = 120)),
+  # Removed since will be embedded in GentrifAI webpage with a logo in nav bar already
+  #titlePanel(tags$img(src = "PRIMARY_logo_transparent_background.png",  height = 50, width = 120)),
   
   
   # Sidebar layout with input and output definitions ----
@@ -27,8 +28,11 @@ ui <- fluidPage(
     
     # Sidebar panel for inputs ----
     sidebarPanel(id="sidebar",width = 6,
-      sliderInput("pickyear", "Select Gentrification Year:", min = 2005, max = 2025, 
-                  value = 2017, sep = "", width = "50%"),
+    ##sliderInput("pickyear", "Select Gentrification Year:", min = 2005, max = 2025, 
+    ##              value = 2017, sep = "", width = "50%"),
+    textOutput("yearvaluetext"),
+    tags$head(tags$style("#yearvaluetext{color: #396a93;
+                         font-size: 25px;font-weight: bold;}")),
       br(), 
       br(),
       leafletOutput("mymap", height=500)
@@ -36,26 +40,31 @@ ui <- fluidPage(
     
     
     mainPanel(width = 6,
-      textOutput("yearvaluetext"),
-      tags$head(tags$style("#yearvaluetext{color: purple;
-                                           font-size: 25px;font-weight: bold;}")),
-      br(),
+      ##textOutput("yearvaluetext"),
+      ##tags$head(tags$style("#yearvaluetext{color: purple;
+      ##                                     font-size: 25px;font-weight: bold;}")),
+      ##br(),
       
       tabsetPanel(type = "tabs",
                   
                   tabPanel("Table", 
-                           tags$h5("Select a row in the table for zip code level analysis in GentriFacts and GentriStats"),
+                           br(),
+                           sliderInput("pickyear", "1. Select Gentrification Year:", min = 2005, max = 2025, 
+                                         value = 2017, sep = ""),
+                           br(),
+                           tags$h5("2. Select a row in the table for zip code level analysis in GentriFacts and GentriStats"),
                            tags$head(
                              tags$style(HTML("
                                              h5 {
                                              font-size: 15px;
-                                             font-style: italic;
-                                             color: #396a93;
+                                             font-weight: bold;
+
                                              }
                                              
                                              "))
                              ),
-                           
+                           #font-style: italic;
+                           #color: #396a93;
                            textOutput("selectzip3"),
                            tags$head(tags$style("#selectzip3{color: #396a93;
                                                 font-size: 15px;
